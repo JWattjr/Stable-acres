@@ -179,7 +179,7 @@ function canPlace(type, i, j) {
 // ---------- assets ----------
 const img = {};
 const load = (key, src) => new Promise(r => { const i = new Image(); i.onload = i.onerror = () => r(); i.src = src; img[key] = i; });
-const SPRITES = [...['wheat', 'carrot', 'pumpkin', 'strawberry', 'seed', 'sprout', 'young'].map(n => 'crop_' + n), 'coin', 'walk0', 'walk1', 'idle', 'basket', 'hen', 'hen_peck', 'sheep', 'sheep_graze', ...['pickup', 'hatchback'].flatMap(k => [`vehicle_${k}_front`, `vehicle_${k}_rear`]), ...Object.keys(CATALOG).filter(k => k !== 'plot')];
+const SPRITES = [...['wheat', 'carrot', 'pumpkin', 'strawberry', 'seed', 'sprout', 'young'].map(n => 'crop_' + n), 'coin', 'walk0', 'walk1', 'idle', ...['mara', 'ivo'].flatMap(v => ['idle', 'walk0', 'walk1'].map(n => `${v}_${n}`)), 'basket', 'hen', 'hen_peck', 'sheep', 'sheep_graze', ...['pickup', 'hatchback'].flatMap(k => [`vehicle_${k}_front`, `vehicle_${k}_rear`]), ...Object.keys(CATALOG).filter(k => k !== 'plot')];
 
 // ---------- canvas + camera ----------
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
@@ -943,8 +943,9 @@ function frame(t) {
     shadow(a.x, a.y, a.kind === 'hen' ? 13 : 24); sprite(a.kind === 'hen' ? (a.pose ? 'hen_peck' : 'hen') : (a.pose ? 'sheep_graze' : 'sheep'), a.x, a.y - hop, a.s, { flip: a.flip });
   }]);
   for (const v of visitors) items.push([v.y, () => {
-    ctx.save(); ctx.filter = `hue-rotate(${v.hue}deg)`;
-    shadow(v.x, v.y, 13); sprite(v.chat ? 'idle' : Math.floor(t / 190) % 2 ? 'walk0' : 'walk1', v.x, v.y - (v.chat ? 0 : Math.abs(Math.sin(t / 190)) * 2), .27, { flip: v.flip }); ctx.restore();
+    // villager outfits are recoloured overalls only (sprites/mara_*, ivo_*), so skin stays natural
+    const pose = v.chat ? 'idle' : Math.floor(t / 190) % 2 ? 'walk0' : 'walk1';
+    shadow(v.x, v.y, 13); sprite(`${v.name.toLowerCase()}_${pose}`, v.x, v.y - (v.chat ? 0 : Math.abs(Math.sin(t / 190)) * 2), .27, { flip: v.flip });
   }]);
   for (let k = 0; k < 2; k++) {
     const direction = k ? -1 : 1, f = ((t / 1600 + k * 10) % 22) - 3;
@@ -959,7 +960,15 @@ function frame(t) {
     shadow(farmer.x, farmer.y, 15); sprite(name, farmer.x, farmer.y - bounce, 0.3, { flip: farmer.flip });
   }]);
   items.sort((a, b) => a[0] - b[0]).forEach(([, f]) => f());
-  visitors.forEach((v, k) => { if (v.chat) speech(v.x, v.y - 90 - k * 16, k ? 'Two wheat, please!' : 'Fresh bread today?'); });
+  { // chat bubbles: stack them when the speakers stand close so they never overlap
+    const placed = [];
+    visitors.forEach((v, k) => {
+      if (!v.chat) return;
+      let y = v.y - 90;
+      for (const q of placed) if (Math.abs(q.x - v.x) < 150 && Math.abs(q.y - y) < 30) y = q.y - 32;
+      placed.push({ x: v.x, y }); speech(v.x, y, k ? 'Two wheat, please!' : 'Fresh bread today?');
+    });
+  }
   for (const home of S.objects.filter(o => ['coop', 'barn'].includes(o.type) && Date.now() >= o.produceAt)) {
     const a = animals.find(a => a.home === home.id); if (a) speech(a.x, a.y - (a.kind === 'hen' ? 48 : 75), a.kind === 'hen' ? 'Eggs ready · tap!' : 'Wool ready · tap!');
   }
@@ -1029,5 +1038,5 @@ Promise.all([load('slab', 'slab-empty.png'), ...SPRITES.map(n => load(n, `sprite
   fetch('sprites/fit.json').then(r => r.json()).then(j => Object.assign(FIT, j)),
   fetch('sprites/crops.json').then(r => r.json()).then(j => Object.assign(CROPFIT, j))]).then(() => {
   requestAnimationFrame(frame);
-  if (DEMO) document.body.appendChild(Object.assign(document.createElement('script'), { src: 'demo.js?v=2026.11.07.5' }));
+  if (DEMO) document.body.appendChild(Object.assign(document.createElement('script'), { src: 'demo.js?v=2026.11.07.6' }));
 });

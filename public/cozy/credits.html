@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stable Acres credits</title>
+<style>body{margin:0;background:#fff8ec;color:#5b4632;font:15px/1.6 system-ui,sans-serif}main{max-width:760px;margin:0 auto;padding:24px 16px}pre{white-space:pre-wrap;word-break:break-word;font:inherit}a{color:#2f6fd0}</style>
+</head><body><main><p><a href="./">← Back to the farm</a></p><pre id="c">Loading…</pre></main>
+<script>
+// Response.text() always decodes UTF-8, so the dashes and quotes in CREDITS.md render correctly on any host.
+fetch('CREDITS.md').then(r => r.text()).then(t => { document.getElementById('c').textContent = t; })
+  .catch(() => { document.getElementById('c').textContent = 'Credits unavailable offline — see CREDITS.md in the repository.'; });
+</script></body></html>
