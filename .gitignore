@@ -1,0 +1,13 @@
+out/
+node_modules/
+.vercel/
+.env*
+*KEY*
+*TOKEN*
+*key*
+*token*
+CODEX_PROMPT.md
+.impeccable/
+# Working paintings, reference images and art-generation utilities stay local.
+# Runtime art is bundled under public/cozy/.
+art/

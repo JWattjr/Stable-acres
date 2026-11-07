@@ -1,0 +1,34 @@
+{
+  "wheat": {
+    "apy": 3.8650688904832364,
+    "source": "Kamino main market · USDC supply",
+    "url": "https://api.kamino.finance/kamino-market/7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF/reserves/metrics",
+    "address": "D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59",
+    "updatedAt": "2026-11-07T11:53:54.423Z",
+    "observedAt": "2026-11-07T11:53:54.423Z"
+  },
+  "carrot": {
+    "apy": 86.97558940021007,
+    "source": "Meteora DLMM · SOL–USDC · 24h fees",
+    "url": "https://dlmm.datapi.meteora.ag/pools/5rCf1DM8LjKTw4YqhnoLcngyZYeNnQqztScTogYHAS6",
+    "address": "5rCf1DM8LjKTw4YqhnoLcngyZYeNnQqztScTogYHAS6",
+    "updatedAt": "2026-11-07T11:53:54.234Z",
+    "observedAt": "2026-11-07T11:53:54.234Z"
+  },
+  "pumpkin": {
+    "apy": 4.938700201436963,
+    "source": "JitoSOL · latest daily staking APY",
+    "url": "https://kobe.mainnet.jito.network/api/v1/stake_pool_stats",
+    "updatedAt": "2026-11-07T11:53:54.758Z",
+    "observedAt": "2026-11-07T11:14:45Z"
+  },
+  "strawberry": {
+    "apy": 0.2739721361362246,
+    "source": "Meteora DLMM · USDC–USDT · 24h fees",
+    "url": "https://dlmm.datapi.meteora.ag/pools/ARwi1S4DaiTG5DX7S4M4ZsrXqpMD1MrTmbu9ue2tpmEq",
+    "address": "ARwi1S4DaiTG5DX7S4M4ZsrXqpMD1MrTmbu9ue2tpmEq",
+    "updatedAt": "2026-11-07T11:53:54.212Z",
+    "observedAt": "2026-11-07T11:53:54.212Z"
+  },
+  "updatedAt": "2026-11-07T11:53:54.758Z"
+}

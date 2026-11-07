@@ -1,0 +1,8 @@
+out/
+art/
+tests/
+.git/
+.impeccable/
+CODEX_PROMPT.md
+.env*
+node_modules/

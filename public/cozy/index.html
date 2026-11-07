@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stable Acres</title>
+<style>
+  @font-face { font-family: Fredoka; font-style: normal; font-weight: 500; font-display: swap; src: url('fonts/fredoka-500.ttf') format('truetype'); }
+  @font-face { font-family: Fredoka; font-style: normal; font-weight: 600; font-display: swap; src: url('fonts/fredoka-600.ttf') format('truetype'); }
+  @font-face { font-family: Fredoka; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/fredoka-700.ttf') format('truetype'); }
+  :root {
+    --cream: #fff8ec; --cream2: #fdf0d8; --edge: #efdcb8; --ink: #5b4632; --muted: #76634a;
+    --green: #356f32; --green-lip: #285827; --gold: #f2b736; --blue: #2f6fd0;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #cdebfd; font-family: Fredoka, system-ui, sans-serif; color: var(--ink); user-select: none; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+  canvas.drag { cursor: grabbing; }
+  .pill { background: var(--cream); border: 2px solid var(--edge); border-radius: 999px; box-shadow: 0 3px 0 rgba(120, 90, 50, .18); display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; font-weight: 600; }
+  #hud-l { position: fixed; top: 14px; left: 14px; display: flex; gap: 10px; align-items: center; }
+  #hud-r { position: fixed; top: 14px; right: 14px; display: flex; gap: 10px; align-items: center; }
+  .star { width: 38px; height: 38px; display: grid; place-items: center; background: var(--gold); color: #5a3b00; font-weight: 700; border-radius: 50%; box-shadow: inset 0 -3px 0 #d89a1c; }
+  .xpwrap { display: flex; flex-direction: column; gap: 3px; min-width: 120px; }
+  .xpwrap small { font-size: 11px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+  .bar { height: 8px; background: #ecdcc0; border-radius: 6px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 100%; background: var(--green); border-radius: 6px; transform: scaleX(0); transform-origin: left; transition: transform .4s cubic-bezier(.22, 1, .36, 1); }
+  .ico { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; font-size: 14px; font-weight: 700; color: #fff; }
+  .ico.coin { background: var(--gold); color: #5a3b00; box-shadow: inset 0 -2px 0 #d89a1c; }
+  .ico.usdc { background: var(--blue); box-shadow: inset 0 -2px 0 #1f5fb0; }
+  #wallet { cursor: pointer; padding: 8px 14px; font: inherit; color: var(--ink); }
+  .wallet-wrap { display: grid; gap: 5px; justify-items: end; }
+  #walletBalance { font-size: 11px; max-width: 210px; background: var(--cream); border-radius: 8px; padding: 3px 6px; }
+  #bar-b { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; }
+  .tile { width: 74px; height: 74px; border-radius: 20px; background: var(--cream); border: 2px solid var(--edge); box-shadow: 0 4px 0 rgba(120, 90, 50, .2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; font-weight: 600; font-size: 13px; }
+  .tile img { height: 36px; }
+  .tile:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(120, 90, 50, .2); }
+  .sheet { position: fixed; left: 50%; bottom: 14px; transform: translate(-50%, 130%); width: min(640px, calc(100% - 24px)); background: var(--cream); border: 2px solid var(--edge); border-radius: 24px; padding: 14px 16px 16px; box-shadow: 0 10px 30px rgba(80, 60, 30, .25); transition: transform .32s cubic-bezier(.22, 1, .36, 1); }
+  .sheet.open { transform: translate(-50%, 0); }
+  .sheet h3 { margin: 0 0 2px; font-size: 18px; }
+  .sheet p.sub { margin: 0 0 10px; font-size: 12px; color: var(--muted); }
+  .x { position: absolute; top: 10px; right: 12px; width: 30px; height: 30px; border-radius: 50%; border: 0; background: #c4473d; color: #fff; font: 700 16px Fredoka; cursor: pointer; box-shadow: inset 0 -3px 0 #9a3129; }
+  .seeds { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+  .seed { flex: 0 0 132px; background: #fff; border: 2px solid var(--edge); border-radius: 16px; padding: 8px; text-align: center; cursor: pointer; position: relative; }
+  .seed.sel { border-color: var(--green); box-shadow: 0 0 0 3px #d7f0d2; }
+  .seed.locked { background: #e9e5dc; color: #60594d; cursor: pointer; }
+  .seed.locked img { filter: grayscale(1); opacity: .65; }
+  .seed img { height: 56px; }
+  .seed b { display: block; font-size: 14px; }
+  .seed .meta { font-size: 11px; color: var(--muted); }
+  .seed .tag { margin-top: 4px; font-size: 10px; background: #eef5ff; color: #2c5d9c; border-radius: 8px; padding: 2px 4px; }
+  #bubble { position: fixed; transform: translate(-50%, -100%); background: var(--cream); border: 2px solid var(--edge); border-radius: 16px; padding: 10px 12px; width: 232px; box-shadow: 0 8px 20px rgba(80, 60, 30, .22); display: none; font-size: 13px; pointer-events: auto; }
+  #bubble:after { content: ""; position: absolute; left: 50%; bottom: -9px; margin-left: -8px; width: 16px; height: 9px; background: var(--edge); clip-path: polygon(0 0, 100% 0, 50% 100%); }
+  #bubble .hd { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; }
+  #bubble .hd img { height: 30px; }
+  #bubble .pool { margin: 6px 0; background: #eef5ff; border-radius: 10px; padding: 6px 8px; color: #2c5d9c; }
+  #bubble .pool b { color: #1d4b86; }
+  #bubble .row { display: flex; justify-content: space-between; color: var(--muted); }
+  #bubble .row span:last-child { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .btn { margin-top: 8px; width: 100%; border: 0; border-radius: 12px; padding: 8px; background: var(--green); color: #fffdf4; font: 600 14px Fredoka; box-shadow: inset 0 -3px 0 var(--green-lip); cursor: pointer; }
+  .btn:disabled { background: #8a7a5e; box-shadow: inset 0 -3px 0 #6d5f47; cursor: default; }
+  #vault .rows { display: grid; gap: 8px; max-height: 40vh; overflow: auto; }
+  #vault .pos { display: flex; align-items: center; gap: 10px; background: #fff; border: 2px solid var(--edge); border-radius: 14px; padding: 8px 10px; font-size: 13px; }
+  #vault .pos img { height: 34px; }
+  #vault .pos .grow { flex: 1; }
+  #vault .pos small { color: var(--muted); display: block; }
+  #vault .tot { display: flex; gap: 10px; margin-bottom: 10px; }
+  #vault .tot div { flex: 1; background: #fff; border: 2px solid var(--edge); border-radius: 14px; padding: 8px 10px; }
+  #vault .tot small { color: var(--muted); display: block; font-size: 11px; }
+  #vault .tot b { font-size: 18px; font-variant-numeric: tabular-nums; }
+  .float { position: fixed; pointer-events: none; font-weight: 700; font-size: 18px; text-shadow: 0 2px 0 #fff, 0 0 6px #fff; animation: rise 1.2s ease-out forwards; }
+  @keyframes rise { to { transform: translateY(-60px); opacity: 0; } }
+  #toast { position: fixed; top: 80px; left: 50%; transform: translate(-50%, -20px); opacity: 0; background: var(--cream); border: 2px solid var(--edge); border-radius: 999px; padding: 8px 18px; font-weight: 600; transition: .3s; pointer-events: none; }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .seed .poor { color: #b23a30; }
+  .pool small { display: block; margin-top: 4px; font-size: 11px; }
+  a { color: #24588b; text-underline-offset: 3px; }
+  .sheet { max-height: calc(100dvh - 100px); overflow-y: auto; }
+  .textbtn { border: 0; background: transparent; color: #24588b; padding: 6px 0; font: 500 13px Fredoka, sans-serif; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .lesson-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 12px 0; border: 0; border-bottom: 1px solid var(--edge); background: transparent; text-align: left; color: var(--ink); font: inherit; cursor: pointer; }
+  .lesson-row small { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
+  .lesson-row > span:last-child { font-size: 12px; white-space: nowrap; color: #326b30; }
+  .lesson-progress { color: var(--muted); font-size: 12px; margin: 8px 0; }
+  .lesson-card { padding: 14px 0; min-height: 150px; }
+  .lesson-card h4 { margin: 0 0 12px; font-size: 21px; }
+  .lesson-card p { font-size: 16px; line-height: 1.5; margin: 0; max-width: 60ch; }
+  .lesson-card .feedback { margin-top: 12px; font-size: 13px; }
+  .lesson-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .lesson-actions .btn { width: auto; min-width: 140px; }
+  .lesson-actions small { color: var(--muted); }
+  .answer { display: block; width: 100%; text-align: left; padding: 12px; margin: 6px 0; border: 1px solid var(--edge); border-radius: 12px; background: #fffdf6; color: var(--ink); font: 500 15px Fredoka, sans-serif; cursor: pointer; }
+  .order-card { border-bottom: 1px solid var(--edge); padding: 12px 0 16px; }
+  .order-card h4 { margin: 0; font-size: 16px; }
+  .order-card p { margin: 8px 0; }
+  .order-card small { color: var(--muted); font-size: 12px; }
+  .order-card .btn { width: auto; display: block; padding: 9px 20px; }
+  .inventory-row { display: flex; gap: 12px; align-items: center; padding: 8px 0; }
+  .inventory-row img { width: 32px; height: 36px; object-fit: contain; }
+  .inventory-row span { flex: 1; font-size: 13px; }
+  .inventory-row small { display: block; color: var(--muted); font-size: 11px; }
+  button:disabled { cursor: default; }
+  .textbtn:disabled { color: var(--muted); text-decoration: none; }
+  button { font-family: inherit; }
+  .tile, .seed { color: var(--ink); font-family: inherit; }
+  .tile { position: relative; }
+  .tile.notify:after { content: ''; position: absolute; right: 7px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: #ac4137; border: 2px solid var(--cream); }
+  .sheet:not(.open) { pointer-events: none; }
+  .seed .meta { display: block; line-height: 1.4; }
+  .seed .meta .lock { display: block; }
+  #weather { font-size: 11px; padding: 8px 10px; }
+  .small-hud { position: fixed; right: 14px; bottom: 106px; width: 42px; height: 42px; padding: 9px; border-radius: 50%; border: 2px solid var(--edge); color: var(--ink); background: var(--cream); cursor: pointer; box-shadow: 0 3px 5px rgba(120,90,50,.16); }
+  .small-hud svg { width: 20px; height: 20px; }
+  #bSound { right: 66px; }
+  #bSound.muted svg { opacity: .5; }
+  #settings { width: min(380px, calc(100% - 24px)); }
+  .setting-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 0; font-size: 14px; }
+  input { accent-color: var(--green); caret-color: var(--green); }
+  input[type="range"] { width: 100%; min-height: 36px; }
+  input[type="checkbox"] { width: 22px; height: 22px; }
+  :focus-visible { outline: 3px solid #24588b; outline-offset: 3px; }
+  button:hover:not(:disabled) { filter: brightness(.96); }
+  ::selection { background: #d7e5cf; color: #3d5131; }
+  * { scrollbar-color: #b7a17e var(--cream2); scrollbar-width: thin; }
+  .sheet p, .lesson-card { user-select: text; }
+  @media (prefers-reduced-motion: reduce) { *, *:before, *:after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  #placebar { position: fixed; bottom: 104px; left: 50%; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; display: flex; gap: 10px; align-items: center; background: var(--cream); border: 2px solid var(--edge); border-radius: 999px; padding: 6px 6px 6px 16px; font-weight: 600; box-shadow: 0 4px 0 rgba(120, 90, 50, .2); transition: .25s cubic-bezier(.22, 1, .36, 1); }
+  #placebar.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  #placebar button { border: 0; border-radius: 999px; padding: 8px 16px; background: var(--green); color: #fffdf4; font: 600 14px Fredoka; box-shadow: inset 0 -3px 0 var(--green-lip); cursor: pointer; }
+  #demo { position: fixed; left: 14px; bottom: 16px; font-size: 11px; color: var(--muted); background: rgba(255, 248, 236, .85); padding: 4px 10px; border-radius: 999px; }
+  @media (max-width: 800px) {
+    .xpwrap { min-width: 78px; } .tile { width: 62px; height: 66px; font-size: 12px; border-radius: 17px; }
+    .tile img { height: 31px; } #bar-b { gap: 7px; bottom: max(12px, env(safe-area-inset-bottom)); }
+    #hud-l { top: 10px; left: 10px; right: 10px; gap: 6px; justify-content: space-between; }
+    #hud-r { top: 72px; left: 10px; right: 10px; gap: 6px; align-items: start; }
+    #hud-r .pill { gap: 5px; padding-right: 9px; font-size: 12px; }
+    #wallet { min-height: 40px; } .wallet-wrap { margin-left: auto; }
+    #walletBalance { max-width: 145px; font-size: 10px; text-align: right; }
+    .ico { width: 24px; height: 24px; } #toast { top: 142px; max-width: calc(100% - 24px); width: max-content; font-size: 12px; border-radius: 16px; }
+    .sheet { max-height: calc(100dvh - 150px); bottom: 10px; } #demo { display: none; }
+    .inventory-row { gap: 8px; } .lesson-card h4 { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<canvas id="c" aria-label="Isometric farm. Drag to pan; use Seeds to plant, tap ripe crops to harvest." role="img"></canvas>
+
+<div id="hud-l">
+  <div class="pill"><div class="star" id="lvl">1</div>
+    <div class="xpwrap"><small>Stable Acres</small><div class="bar"><i id="xp"></i></div></div></div>
+  <div class="pill" id="weather" title="Rain gives crops 10% faster growth"></div>
+</div>
+<div id="hud-r">
+  <div class="pill" id="coinsPill"><div class="ico coin">¢</div><span id="coins">0</span></div>
+  <div class="pill" title="Gameplay USDC is simulated"><div class="ico usdc">$</div><span id="usdc">0</span><small>demo</small></div>
+  <div class="wallet-wrap"><button class="pill" id="wallet">Connect wallet</button><small id="walletBalance" role="status">Read-only · Solana mainnet</small></div>
+</div>
+
+<div id="bar-b">
+  <button class="tile" id="bLearn"><img src="sprites/farmhouse.png" alt="">Learn</button>
+  <button class="tile" id="bSeeds"><img src="sprites/seed.png" alt="">Seeds</button>
+  <button class="tile" id="bOrders"><img src="sprites/basket.png" alt="">Orders</button>
+  <button class="tile" id="bShop"><img src="sprites/market.png" alt="">Shop</button>
+  <button class="tile" id="bVault"><img src="sprites/coin.png" alt="">Vault</button>
+</div>
+<button class="small-hud" id="bHome" aria-label="Recenter farm" title="Recenter farm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11 12 3l9 8M6 10v11h12V10M10 21v-7h4v7"/></svg></button>
+<button class="small-hud" id="bSound" aria-label="Sound settings" title="Sound settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h4l5-5v16l-5-5H4zM17 8q5 4 0 8M16 11q2 1 0 2"/></svg></button>
+
+<div class="sheet" id="seedSheet" inert aria-labelledby="seedsTitle">
+  <button class="x" data-close aria-label="Close Seeds">✕</button>
+  <h3 id="seedsTitle">Choose seeds</h3>
+  <p class="sub">Tap or swipe across empty plots to plant. Tap a growing crop to see what's farming under it.</p>
+  <div class="seeds" id="seeds"></div>
+</div>
+
+<div class="sheet" id="shop" inert aria-label="Shop">
+  <button class="x" data-close aria-label="Close Shop">✕</button>
+  <h3>Shop</h3>
+  <p class="sub">Pick something, then tap a free spot on the grass to build it.</p>
+  <div class="seeds" id="shopItems"></div>
+</div>
+
+<div id="placebar"><span id="placeName"></span><button id="placeCancel">Done</button></div>
+
+<div class="sheet" id="vault" inert aria-label="Vault">
+  <button class="x" data-close aria-label="Close Vault">✕</button>
+  <h3>Vault</h3>
+  <p class="sub">Simulated balances · no deposits · 1 second = 1 day of demo yield.</p>
+  <p class="sub" id="rateStatus">Demo rates</p>
+  <div class="tot">
+    <div><small>Demo staked</small><b id="vStaked">0</b></div>
+    <div><small>Demo earned</small><b id="vEarned">0</b></div>
+    <div><small>Avg APY</small><b id="vApy">–</b></div>
+  </div>
+  <div class="rows" id="vRows"></div>
+</div>
+
+<div id="bubble"></div>
+<div class="sheet" id="settings" inert aria-label="Sound settings">
+  <button class="x" data-close aria-label="Close sound settings">✕</button>
+  <h3>Farm sounds</h3>
+  <label class="setting-row" for="musicOn">Background music <input type="checkbox" id="musicOn"></label>
+  <label class="setting-row" for="musicVolume">Music volume <output id="volumeValue">45%</output></label>
+  <input type="range" id="musicVolume" min="0" max="100" value="45">
+  <label class="setting-row" for="effectsOn">Quiet sound effects <input type="checkbox" id="effectsOn"></label>
+  <p class="sub" id="audioStatus">Music starts on your first tap. Pauses when this tab is hidden.</p>
+  <p class="sub">“Carefree” by Kevin MacLeod (incompetech.com), <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Trimmed CC0 foley via Openverse.</p>
+  <a href="CREDITS.md" target="_blank" rel="noopener">Full music &amp; sound credits</a>
+</div>
+<div class="sheet" id="orders" inert aria-label="Orders">
+  <button class="x" data-close aria-label="Close Orders">✕</button>
+  <h3>Orders from the village</h3>
+  <p class="sub" id="orderCount"></p>
+  <div id="orderCards"></div>
+  <h3 style="margin-top:18px">Your basket</h3>
+  <p class="sub">Harvests wait here. Sell instantly, or save them for a villager.</p>
+  <div id="inventoryRows"></div>
+</div>
+<div class="sheet" id="learn" inert aria-label="Learn">
+  <button class="x" data-close aria-label="Close Learn">✕</button>
+  <h3>Little lessons, lasting roots</h3>
+  <p class="sub" id="studyStars">0 Study Stars</p>
+  <div id="lessonContent"></div>
+  <p class="sub" style="margin-top:14px">For learning, not financial advice. Real protocols can lose money; all farm balances and boosts are demo.</p>
+  <a href="CREDITS.md" target="_blank" rel="noopener">Credits</a>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="demo">Demo mode · 1 second = 1 day of yield</div>
+
+<script src="rates.js?v=2026.11.07.1"></script>
+<script src="game.js?v=2026.11.07.1"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+[
+  {
+    "key": "carefree",
+    "title": "Carefree",
+    "author": "Kevin MacLeod",
+    "url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Carefree.mp3",
+    "page": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400037",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "music": true,
+    "file": "public/cozy/music/carefree.mp3"
+  },
+  {
+    "key": "plant",
+    "title": "Footsteps Dirt Gravel",
+    "author": "PotatokingXII",
+    "id": "6e486781-b532-42d0-a27e-f8b4396f945f",
+    "url": "https://cdn.freesound.org/previews/352/352870_4187409-hq.mp3",
+    "page": "https://freesound.org/people/PotatokingXII/sounds/352870",
+    "duration": 0.5,
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "file": "public/cozy/sounds/plant.mp3"
+  },
+  {
+    "key": "pluck",
+    "title": "Plucking an Elastic Band",
+    "author": "dsebeste",
+    "id": "6198d26f-362f-442c-9728-658889041fc6",
+    "url": "https://cdn.freesound.org/previews/355/355041_3907739-hq.mp3",
+    "page": "https://freesound.org/people/dsebeste/sounds/355041",
+    "duration": 0.3,
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "file": "public/cozy/sounds/pluck.mp3"
+  },
+  {
+    "key": "build",
+    "title": "Wood Knock",
+    "author": "Mrguff",
+    "id": "19380888-f422-44d9-aad1-d2b7d788871f",
+    "url": "https://cdn.freesound.org/previews/369/369710_2855293-hq.mp3",
+    "page": "https://freesound.org/people/Mrguff/sounds/369710",
+    "duration": 0.65,
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "file": "public/cozy/sounds/build.mp3"
+  },
+  {
+    "key": "chime",
+    "title": "Single chime",
+    "author": "LloydEvans09",
+    "id": "41c6cb5b-91b5-4574-ae96-74a555b6247b",
+    "url": "https://cdn.freesound.org/previews/185/185822_2567799-hq.mp3",
+    "page": "https://freesound.org/people/LloydEvans09/sounds/185822",
+    "duration": 1.7,
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "file": "public/cozy/sounds/chime.mp3"
+  },
+  {
+    "key": "tap",
+    "title": "Mouse click sounds",
+    "author": "Masgame",
+    "id": "3849018d-0ac8-4f6b-b44d-5ec26a4b32af",
+    "url": "https://cdn.freesound.org/previews/347/347544_5662401-hq.mp3",
+    "page": "https://freesound.org/people/Masgame/sounds/347544",
+    "duration": 0.16,
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "file": "public/cozy/sounds/tap.mp3"
+  },
+  {
+    "key": "coin",
+    "title": "Real Coin Drop",
+    "author": "Rocotilos",
+    "id": "5ae65b94-d34b-42e0-9cbc-bec2ea5b60ef",
+    "url": "https://cdn.freesound.org/previews/343/343462_1400623-hq.mp3",
+    "page": "https://freesound.org/people/Rocotilos/sounds/343462",
+    "duration": 0.164,
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "file": "public/cozy/sounds/coin.mp3"
+  }
+]
