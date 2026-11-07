@@ -22,9 +22,9 @@ const XP_FOR = l => 10 + (l - 1) * 15;
 const LESSONS = [
   { title: 'What is a stablecoin?', short: 'USDC', cards: [
     ['A dollar-shaped token', 'USDC is a digital token designed to track one US dollar. On Solana, it can move between wallet addresses.'],
-    ['Designed to stay steady', 'Its issuer, Circle, says USDC is backed by reserves. That aim is different from a guarantee: its market price can move away from $1.'],
+    ['Designed to stay steady', 'Circle backs USDC with reserves. USDC is redeemable 1:1 for US dollars.'],
     ['Our farm is pretend money', 'The blue balance here is demo USDC. Connecting a wallet only reads its real mainnet USDC balance; planting never moves it.'],
-  ], question: 'What does USDC aim to track?', options: ['One US dollar', 'The price of SOL', 'A guaranteed profit'], answer: 0, why: 'USDC aims to track $1. A stablecoin can still lose its peg.' },
+  ], question: 'What does USDC aim to track?', options: ['One US dollar', 'The price of SOL', 'A guaranteed profit'], answer: 0, why: 'USDC is designed to track the US dollar, supported by reserve backing and 1:1 dollar redemption.' },
   { title: 'What is lending yield?', short: 'Lending', cards: [
     ['A shared lending pot', 'A lending service such as Kamino lets people supply tokens that other people may borrow. Borrowers generally put up collateral: assets backing their loan.'],
     ['Where the interest comes from', 'Borrowers pay interest. Some goes to suppliers after protocol charges. When demand to borrow changes, the supply rate can change too.'],
@@ -52,7 +52,7 @@ const LESSONS = [
   ], question: 'Which rate includes compounding assumptions?', options: ['APR', 'Both are fixed guarantees', 'APY'], answer: 2, why: 'APY includes compounding assumptions. Neither rate guarantees future earnings.' },
   { title: 'Risk basics', short: 'Before real money', cards: [
     ['Software can fail', 'A smart contract is code that controls on-chain assets. Bugs, exploits or a compromised service can cause losses, even in an audited protocol.'],
-    ['Stable is an aim', 'Depeg risk means a token moves away from its target price. Wallet mistakes, lost keys, market changes and limited withdrawal liquidity add other risks.'],
+    ['Backing and market prices', 'Stablecoins are designed to track their target currency. During market stress, exchange prices can differ from that target; this is called a depeg. Lost keys and limited withdrawal access are separate risks.'],
     ['Keep your choices yours', 'Never invest money you cannot afford to lose. Understand an action, its fees and how to withdraw before signing. This prototype asks for no signature and takes no deposits.'],
   ], question: 'What does an audit guarantee?', options: ['No losses', 'It does not guarantee safety', 'A fixed APY'], answer: 1, why: 'An audit may reduce some risks; it cannot remove all bugs, market risks or losses.' },
 ];
@@ -1015,5 +1015,5 @@ Promise.all([load('slab', 'slab-empty.png'), ...SPRITES.map(n => load(n, `sprite
   fetch('sprites/fit.json').then(r => r.json()).then(j => Object.assign(FIT, j)),
   fetch('sprites/crops.json').then(r => r.json()).then(j => Object.assign(CROPFIT, j))]).then(() => {
   requestAnimationFrame(frame);
-  if (DEMO) document.body.appendChild(Object.assign(document.createElement('script'), { src: 'demo.js?v=2026.11.07.1' }));
+  if (DEMO) document.body.appendChild(Object.assign(document.createElement('script'), { src: 'demo.js?v=2026.11.07.3' }));
 });
