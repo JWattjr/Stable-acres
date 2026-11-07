@@ -179,7 +179,7 @@ function canPlace(type, i, j) {
 // ---------- assets ----------
 const img = {};
 const load = (key, src) => new Promise(r => { const i = new Image(); i.onload = i.onerror = () => r(); i.src = src; img[key] = i; });
-const SPRITES = [...['wheat', 'carrot', 'pumpkin', 'strawberry', 'seed', 'sprout', 'young'].map(n => 'crop_' + n), 'coin', 'walk0', 'walk1', 'idle', 'basket', 'hen', 'hen_peck', 'sheep', 'sheep_graze', ...Object.keys(CATALOG).filter(k => k !== 'plot')];
+const SPRITES = [...['wheat', 'carrot', 'pumpkin', 'strawberry', 'seed', 'sprout', 'young'].map(n => 'crop_' + n), 'coin', 'walk0', 'walk1', 'idle', 'basket', 'hen', 'hen_peck', 'sheep', 'sheep_graze', ...['pickup', 'hatchback'].flatMap(k => [`vehicle_${k}_front`, `vehicle_${k}_rear`]), ...Object.keys(CATALOG).filter(k => k !== 'plot')];
 
 // ---------- canvas + camera ----------
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
@@ -274,15 +274,13 @@ function speech(x, y, text) {
   ctx.beginPath(); ctx.moveTo(x - 3, y + 1); ctx.lineTo(x, y + 6); ctx.lineTo(x + 4, y + 1); ctx.fill();
   ctx.fillStyle = '#5b4632'; ctx.textAlign = 'center'; ctx.fillText(text, x, y - 7); ctx.restore();
 }
-function drawCar(x, y, color, direction) {
-  ctx.save(); ctx.translate(x, y); shadow(0, 6, 29); ctx.rotate(Math.atan2(A[1], A[0]) + (direction < 0 ? Math.PI : 0));
-  ctx.fillStyle = '#5b625a';
-  for (const a of [-17, 16]) for (const b of [-12, 12]) { ctx.beginPath(); ctx.ellipse(a, b, 6, 3, 0, 0, 7); ctx.fill(); }
-  ctx.fillStyle = color; ctx.strokeStyle = '#786e55'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.roundRect(-28, -13, 56, 26, 9); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#b9d8db'; ctx.beginPath(); ctx.roundRect(-9, -10, 22, 20, 5); ctx.fill();
-  ctx.fillStyle = color; ctx.fillRect(-4, -10, 11, 20);
-  ctx.fillStyle = '#fff0bd'; ctx.fillRect(22, -9, 3, 5); ctx.fillRect(22, 4, 3, 5); ctx.restore();
+function drawCar(x, y, type, direction) {
+  // Original painted Gemini sprites; see VEHICLE-ART.md for prompt/provenance.
+  const name = `vehicle_${type}_${direction > 0 ? 'front' : 'rear'}`, im = img[name];
+  if (!im?.width) return;
+  shadow(x, y, 24);
+  // The rear artwork faces NW; mirror it to follow our NE-bound lane.
+  sprite(name, x, y, 72 / im.width, { flip: direction < 0, ay: .84 });
 }
 function drawButterflies(t) {
   for (let k = 0; k < 5; k++) {
@@ -306,7 +304,23 @@ function collectProduce(home) {
 }
 
 const fx = [];
-const CLOUDS = [{ x: 200, y: 300, r: 260, v: 14 }, { x: 1100, y: 600, r: 320, v: 11 }, { x: -300, y: 760, r: 220, v: 17 }];
+const CLOUDS = [{ x: 200, y: 300, r: 260, v: 14 }, { x: 1100, y: 600, r: 320, v: 11 }, { x: -300, y: 760, r: 220, v: 17 }, { x: 650, y: 390, r: 280, v: 12 }, { x: 1350, y: 240, r: 240, v: 15 }];
+const cloudStamps = {};
+function cloudStamp(rain) {
+  const key = rain ? 'rain' : 'fair';
+  if (cloudStamps[key]) return cloudStamps[key];
+  // Cache the soft atmospheric effect once; no per-frame blur or image fetch.
+  const stamp = document.createElement('canvas'); stamp.width = 384; stamp.height = 180;
+  const c = stamp.getContext('2d');
+  const puffs = [[91, 104, 67], [147, 72, 65], [209, 69, 69], [267, 103, 73], [193, 114, 87], [315, 112, 42]];
+  for (const [x, y, r] of puffs) {
+    const g = c.createRadialGradient(x, y, r * .22, x, y, r);
+    const rgb = rain ? '204,216,225' : '255,253,242';
+    g.addColorStop(0, `rgba(${rgb},.92)`); g.addColorStop(.6, `rgba(${rgb},.75)`); g.addColorStop(1, `rgba(${rgb},0)`);
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
+  }
+  return cloudStamps[key] = stamp;
+}
 
 // ---------- weather (fixed 3-minute buckets, seeded and integrated across boundaries) ----------
 const WEATHER_MS = 180000;
@@ -934,8 +948,10 @@ function frame(t) {
   }]);
   for (let k = 0; k < 2; k++) {
     const direction = k ? -1 : 1, f = ((t / 1600 + k * 10) % 22) - 3;
-    const [x, y] = tileXY(direction > 0 ? f : 16 - f, k ? 15.1 : 14.1);
-    if (f >= -.5 && f <= 16) items.push([y, () => drawCar(x, y, k ? '#b5c4be' : '#d9bb7e', direction)]);
+    // Keep the full tyre footprint on the asphalt, clear of the painted slab lip.
+    const [x, y] = tileXY(direction > 0 ? f : 16 - f, k ? 14.65 : 14.1);
+    const type = (Math.floor((t / 1600 + k * 10) / 22) + k) % 2 ? 'hatchback' : 'pickup';
+    if (f >= -.5 && f <= 16) items.push([y, () => drawCar(x, y, type, direction)]);
   }
   items.push([farmer.y, () => {
     const name = farmer.cheer ? 'basket' : walking ? (Math.floor(t / 160) % 2 ? 'walk0' : 'walk1') : 'idle';
@@ -957,20 +973,18 @@ function frame(t) {
     drawObject({ type: placing.type, i: placing.i, j: placing.j }, t, true);
   }
 
-  // soft cloud shadows drifting across the farm
-  for (const c of CLOUDS) {
+  // Clouds float above the world, with soft shadows below. Rain brings extra banks.
+  const cloudWeather = weatherAt(Date.now()), raining = cloudWeather === 'rain';
+  for (const [index, c] of CLOUDS.entries()) {
     c.x += c.v * dt; if (c.x > MAP_W + 400) c.x = -400;
+    if (index >= 3 && cloudWeather === 'clear') continue;
     const g = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, c.r);
-    g.addColorStop(0, 'rgba(40,70,90,.10)'); g.addColorStop(1, 'rgba(40,70,90,0)');
+    g.addColorStop(0, `rgba(40,70,90,${raining ? .16 : .09})`); g.addColorStop(1, 'rgba(40,70,90,0)');
     ctx.save(); ctx.translate(c.x, c.y); ctx.scale(1, .45); ctx.translate(-c.x, -c.y);
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, 7); ctx.fill(); ctx.restore();
-    // Translucent high clouds: feathered edges, kept light enough to read the farm.
-    for (let k = 0; k < 3; k++) {
-      const x = c.x + k * 70, y = c.y - 180 + (k % 2) * 24;
-      const haze = ctx.createRadialGradient(x, y, 0, x, y, c.r * .46);
-      haze.addColorStop(0, 'rgba(255,253,240,.12)'); haze.addColorStop(1, 'rgba(255,253,240,0)');
-      ctx.fillStyle = haze; ctx.beginPath(); ctx.ellipse(x, y, c.r * .46, c.r * .23, -.1, 0, 7); ctx.fill();
-    }
+    ctx.save(); ctx.globalAlpha = raining ? .48 : cloudWeather === 'cloudy' ? .38 : .28;
+    ctx.drawImage(cloudStamp(raining), c.x - c.r, c.y - 230 + Math.sin(t / 14000 + index) * 10, c.r * 2, c.r * .78);
+    ctx.restore();
   }
 
   for (let k = fx.length - 1; k >= 0; k--) {
@@ -1015,5 +1029,5 @@ Promise.all([load('slab', 'slab-empty.png'), ...SPRITES.map(n => load(n, `sprite
   fetch('sprites/fit.json').then(r => r.json()).then(j => Object.assign(FIT, j)),
   fetch('sprites/crops.json').then(r => r.json()).then(j => Object.assign(CROPFIT, j))]).then(() => {
   requestAnimationFrame(frame);
-  if (DEMO) document.body.appendChild(Object.assign(document.createElement('script'), { src: 'demo.js?v=2026.11.07.3' }));
+  if (DEMO) document.body.appendChild(Object.assign(document.createElement('script'), { src: 'demo.js?v=2026.11.07.5' }));
 });

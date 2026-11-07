@@ -14,6 +14,8 @@
 
 ## Visuals and tools
 
+Painted pickup/hatchback sprites: generated with Gemini in the owner's browser on 2026-11-07, then keyed and trimmed for this game. [Prompt, source chat and processing](VEHICLE-ART.md). Happy Farm was a polish reference only; its vehicle pixels are not bundled.
+
 Existing Stable Acres sprites and slab supplied with this project; their original human/AI provenance and rights should be confirmed by the owner before release. Original canvas ambience added for this prototype. No reference-game assets, text or code used.
 
 Project AI tools named by the owner: Claude, Codex, ChatGPT/GPT-Image, Gemini. This revision used Codex; an attempted cow generation did not produce an asset.

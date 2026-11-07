@@ -83,6 +83,6 @@ Verify the explicitly linked project, test the preview and its browser console, 
 
 [Full audio/font credits](public/cozy/CREDITS.md) and [audio provenance](public/cozy/audio-sources.json). Music: “Carefree” by Kevin MacLeod, CC BY 4.0, normalized and re-encoded to ~96 kbps MP3. All six foley recordings are CC0, found through Openverse. Recreate audio with `FFMPEG_PATH` set and `node scripts/prepare-audio.mjs`.
 
-AI tools named for the project: **Claude, Codex, ChatGPT/GPT-Image, Gemini**. This revision used Codex. Existing art was supplied with the project; confirm its original rights before release. No code, sprites, text or layout were copied from Happy Farm; it was studied for lesson pacing and ambient activity.
+AI tools named for the project: **Claude, Codex, ChatGPT/GPT-Image, Gemini**. This revision used Codex and Gemini in the owner’s browser for the painted vehicle sprites. See [vehicle artwork provenance](public/cozy/VEHICLE-ART.md). Existing art was supplied with the project; confirm its original rights before release. No code, sprites, text or layout were copied from Happy Farm; it was studied for lesson pacing and ambient activity.
 
 See [LIMITATIONS.md](LIMITATIONS.md), [VERIFICATION.md](VERIFICATION.md) and [PROGRESS.md](PROGRESS.md) for the honest prototype boundary and task checkpoints.

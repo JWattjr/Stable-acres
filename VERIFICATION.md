@@ -54,6 +54,18 @@ Independent finish review: **ship** for all ten captures and sampled UI source, 
 
 `node capture-demo.mjs`: **completed at 40.1 seconds**, 60 fps, 1920×1080 H.264 MP4, zero captured console errors. Output: `out/stable-acres-demo.mp4`. The recorder also saved the README screenshot at 12 seconds. Demo uses local assets/fonts, seeded randomness, fixed demo rates, a fixed virtual-clock origin and silent audio.
 
+## Painted traffic and overhead clouds
+
+Original painted pickup/hatchback assets were generated in Gemini in the owner's Chrome browser. Exact prompt, style inputs and processing are in `public/cozy/VEHICLE-ART.md`; the raw sheet remains ignored locally.
+
+The owner's screenshot exposed verge overlap. The northeast lane now uses j14.65 (southwest remains j14.1). Road close-ups at 1280×720, 390×844 and 647×764 cover both vehicle types in both directions: `out/vehicle-review/` and `out/vehicle-review-alternate/`. Normal farm/cloud captures at the same sizes plus forced rain are under `out/cloud-review/`. All bounds checks passed with zero JavaScript exceptions. An initial capture-helper rain assertion failed because its URL contained two conflicting weather values; the helper now replaces the parameter and the complete captures pass.
+
+Scoped independent review returned **ship** after inspecting all ten new captures, the owner's screenshot, reports and current lane/cloud code: tyre contacts on asphalt, appropriate painted style and transparency, overhead clouds stronger in rain, and readable farm/HUD. This is scoped appearance evidence, not a physical-device performance test. Eight automated tests, JavaScript syntax and the changed-target design detector passed (no detector findings). The user's running local game was refreshed to version 2026.11.07.5.
+
+Final version 2026.11.07.5 recording: `out/painted-traffic-clouds-demo.mp4`, 1920×1080, 12 fps, **41.0 seconds**, complete scripted demo with zero captured console errors. The recorder refreshed `public/cozy/screenshot.jpg` at 12 seconds. This is a functional animation capture, not a 60 fps performance benchmark.
+
+Source inspection confirms the existing lighting follows the device's local clock unless `t=day|dusk|night` is set. Midnight shares the night tint. Lighting has no input to APY or simulated earnings; rain affects crop growth only. The current test tab uses `t=day`.
+
 ## Not verified / deferred
 
 - Real Phantom extension approval/rejection/account switching and physical mobile audio.
