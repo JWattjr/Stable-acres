@@ -2,6 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "",
-  "buildCommand": "node scripts/fetch-apys.mjs",
+  "buildCommand": "",
   "outputDirectory": "public/cozy"
 }
