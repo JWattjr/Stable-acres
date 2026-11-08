@@ -3,4 +3,5 @@
 *.mjs text eol=lf
 *.html text eol=lf
 *.json text eol=lf
+*.sol text eol=lf
 .githooks/pre-commit text eol=lf
