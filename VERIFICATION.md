@@ -33,3 +33,9 @@ Fresh scoped visual review: **SHIP**, all 13 required captures, both reports and
 ## Remaining signed-claim check
 
 Studio's faucet refused funding a disposable sandbox test wallet: “Faucet drip requires the DEVELOPER_ADMIN_DEFAULT_ROLE on at least one available entity for this user.” Studio reported stopping before any claim broadcast; no claim hash or smoke artifact exists. No role/permission was changed. Funded external-wallet signing, wallet-native fees, replacement transactions and physical-mobile audio remain unverified. No real-money deposits/approvals/transfers or mainnet actions exist.
+
+## Hosted Arc preview
+
+https://stable-acres-arc.vercel.app/ serves the separate Vercel project `prj_PAiSAL227uFsGOwzeCqw85SdpIns` under Wattx's projects. Deployment `dpl_5tFKQT9FmrfAeU5TUtZq6n8QRLTj` reached READY, its game/contract-manifest hashes matched local files, and it was promoted. The project uses Node 24, Other framework, no install/build command and output `public/cozy`. It has no Git production link to main.
+
+All 73 public game assets returned HTTP 200 and exactly matched local bytes. Hosted browser checks repeated all three sizes and the real-RPC/read-only-provider badge fixtures, with fitting bounds and no exceptions. The published Solana game SHA-256 still matched the original worktree, whose clean main remained at 027cb48. Source is on the separate arc-edition branch; later documentation/line-ending commits do not change the hosted game bytes.

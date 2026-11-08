@@ -8,3 +8,4 @@
 - Added explicit zero-value badge claims, test-gas disclosure, receipt/tx/event/state checks, pending reservation, cancellation and account-change guards.
 - 16 local tests pass; browser captures fit three sizes with no exceptions. Real public testnet reads and a rejecting test provider were checked. The full 41-second, 12 fps demo completed without errors. Fresh visual review: SHIP.
 - Signed smoke claim blocked by Studio faucet developer-admin permission; no claim broadcast or permissions changed. External-wallet signing still needs a funded testnet-wallet check.
+- Published the Arc preview at https://stable-acres-arc.vercel.app/ in a separate CLI-deployed Vercel project. All 73 public assets match, hosted browser checks pass and original Solana main/live source remains unchanged. Arc source is pushed on arc-edition.

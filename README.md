@@ -2,9 +2,13 @@
 
 A cozy farm for learning about stablecoins, with optional onchain study badges on Arc testnet.
 
+[Play the Arc edition](https://stable-acres-arc.vercel.app/) · [Arc source branch](https://github.com/JWattjr/Stable-acres/tree/arc-edition)
+
 ![Stable Acres](public/cozy/screenshot.jpg)
 
 This edition lives on the `arc-edition` branch. The [Solana release](https://stable-acres.vercel.app/) remains separate on `main`.
+
+The Arc preview is deployed separately to `wattxs-projects/stable-acres-arc`. This project is CLI-deployed and is not linked to the repository's main production branch. For a future manual deployment, verify that exact project from the Arc worktree before running `vercel deploy --prod --project stable-acres-arc --scope wattxs-projects`.
 
 ## Play
 
