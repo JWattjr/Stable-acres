@@ -1,6 +1,6 @@
 # Stable Acres: honest prototype limitations
 
-Status: local read-only prototype, 2026-11-07. Publishing was explicitly deferred by the owner. Effort: **S** = roughly 0.5–2 days; **M** = roughly 3–10 days; **L** = multiple weeks or external review. Estimates are directional, not commitments.
+Status: hosted read-only prototype, published at the owner's request on 2026-11-08 at https://stable-acres.vercel.app/. Effort: **S** = roughly 0.5–2 days; **M** = roughly 3–10 days; **L** = multiple weeks or external review. Estimates are directional, not commitments.
 
 ## Yield and wallet safety
 
@@ -41,7 +41,6 @@ Status: local read-only prototype, 2026-11-07. Publishing was explicitly deferre
 | --- | --- | --- |
 | Four crops, fifteen purchasable catalog items, seven lessons, three active orders, and two produce types. No seasons, quests, multiplayer or social visiting. | Long-term retention and variety are shallow despite a complete short-session loop. | Add a small themed quest chain, spaced lesson reviews and village events before expanding to social features. **M**; multiplayer **L** |
 | The recording is silent by design and uses fixed demo rates. Audio controls apply to interactive play. | A judge watching only the MP4 will not hear the game’s music or see live network behavior. | Provide an interactive play link plus a separately edited, correctly credited trailer with clear demo labels. **S** |
-| GitHub and Vercel publication were deferred at the owner's request; no public repo URL or playable hosted URL has been verified. | Judges cannot access this local build from another machine. | Owner authenticates with `gh auth login` and `vercel login`; scan staged content, publish this isolated repo, deploy the static output, and check the live console. **S** |
 | Educational copy is neutral and labelled “not financial advice,” but that label alone does not resolve financial-promotion, consumer-protection or regional restrictions. | Real-money features may change the legal classification and permitted audience. | Obtain qualified jurisdiction-specific review, age/region policies and appropriate disclosures before money movement or token sales. **M–L** |
 | Carefree is CC BY 4.0; foley metadata is CC0 from Openverse; Fredoka uses OFL. Licences and processing are recorded, but no music is guaranteed immune to automated Content ID claims. | Credits must travel with distributed builds/videos; rights disputes still need handling. | Preserve CREDITS.md, licence links and provenance in every release; archive source licence evidence and review any later assets. **S** |
 

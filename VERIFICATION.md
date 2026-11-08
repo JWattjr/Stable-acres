@@ -71,6 +71,13 @@ Source inspection confirms the existing lighting follows the device's local cloc
 - Real Phantom extension approval/rejection/account switching and physical mobile audio.
 - Broad device/performance/accessibility testing or financial/security audit.
 - Cow art and milk production: image generation reached its usage limit, so this feature was not shipped.
-- GitHub/Vercel publishing and live-host console: owner requested local completion and publication later.
 
 See `LIMITATIONS.md` for why each gap matters, fixes with effort estimates, and ranked jam/product improvements.
+
+## Live publication — 2026-11-08
+
+The owner authorized publication to `https://github.com/JWattjr/Stable-acres.git`, superseding the earlier deferral. GitHub `main` received the existing history through `82c35496b326ebd3647e08a55235222210dac126`. Vercel project `prj_nqVEbF4bayk6mBEAK4E3xkWmx493` belongs to `wattxs-projects` / `team_4mmvifpyuNjvwkcbbJvmxNIc` and is Git-connected to that repository. Node 24, Other framework, `node scripts/fetch-apys.mjs`, no install command and `public/cozy` output were verified before deployment.
+
+Deployment `dpl_2iagGP49HyeWshDcwbBTzyHtY3GB` reached READY, was checked through authenticated Vercel curl and promoted to https://stable-acres.vercel.app/. The public root returns HTTP 200 without a login; deployed `game.js` SHA-256 matches the source. All 73 public assets returned HTTP 200 and matched source bytes, except `apys.json`, whose four valid entries were refreshed during deployment. Reports are ignored under `out/live-assets-report.json` and `out/live-review/`.
+
+Eight automated tests passed and a release scan of all 90 tracked files found no credential patterns. An isolated headless browser loaded the public site at 1280×720, 390×844 and 647×764, exercised planting, Orders and the LP lesson, and captured forced rain. All four protocol feeds showed Live; HUD/navigation bounds fit and no JavaScript exceptions occurred. An early screenshot run reused the previous page's ready state while HTTPS navigation was pending; `scripts/snapshot-ui.mjs` now waits for the requested loader and all sprites. The completed phone capture visibly includes the farm. The in-app browser control tool was unavailable in this session; verification used an isolated browser profile instead. Real Phantom and physical-mobile audio limitations remain as listed above.

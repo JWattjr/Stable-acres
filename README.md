@@ -4,6 +4,8 @@ A cozy farm where every crop quietly farms real stablecoin yield on Solana.
 
 **Playable read-only prototype:** live protocol rates and real wallet balance reads; every farm balance, stake, reward and yield boost is simulated. No deposits, transfers or signing.
 
+[Play live](https://stable-acres.vercel.app/) · [GitHub repository](https://github.com/JWattjr/Stable-acres)
+
 ![Stable Acres gameplay](public/cozy/screenshot.jpg)
 
 ## Play
@@ -63,18 +65,18 @@ node capture-demo.mjs
 
 The default paths retain this workspace’s installed Chrome headless shell and ffmpeg. On another computer set `CHROME_PATH`, `FFMPEG_PATH` and, if needed, `CAPTURE_URL`. Output is ignored under `out/`. The recorder uses a virtual clock and reports failure if the scripted run never finishes.
 
-## Publish later
+## Hosting
 
-Publishing was deferred by the owner. This directory is its own repository; nothing from its parent belongs in it.
+Published at the owner's request on 2026-11-08. GitHub `JWattjr/Stable-acres` is connected to Vercel project `wattxs-projects/stable-acres`; pushes to `main` deploy automatically. The project uses Node 24, the Other framework preset and the settings in `vercel.json`. This directory is its own repository; nothing from its parent belongs in it.
 
 ```powershell
 node scripts/scan-staged.mjs
-gh auth login -h github.com
-gh repo create stable-acres --public --source . --remote origin --push
-vercel login
-vercel link
-vercel project inspect --non-interactive
-vercel deploy
+git push origin main
+
+# Optional manual preview from this checkout:
+vercel link --yes --project stable-acres --scope wattxs-projects
+vercel project inspect --non-interactive --scope wattxs-projects
+vercel deploy --scope wattxs-projects
 ```
 
 Verify the explicitly linked project, test the preview and its browser console, then deploy/promote production. `vercel.json` serves `public/cozy/index.html` at `/`. Its only build command refreshes static APY data; there is no application compilation or npm dependency. Browser fetches keep rates fresh after deployment; an offline cached rate eventually becomes demo. No paid cron is needed. Do not place private RPC/API credentials in browser files.
