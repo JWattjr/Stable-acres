@@ -2,6 +2,8 @@
 
 Recorded 2026-11-07. This is an evidence note for an ordinary extension, not a replacement visual system. No PRODUCT.md or DESIGN.md was supplied or found in the project/parent for this pass. The incumbent implementation and the user's requirement to retain its painted farm, sprites, grid and controls remain the authority.
 
+Arc edition update: 2026-11-08. This separate worktree preserves the incumbent identity. The original Solana production edition remains the main edition and was not changed by this documentation pass. The 2026-11-07 UI and vehicle/cloud evidence below is retained as historical context; the Arc-current evidence later in this note describes this worktree's current runtime.
+
 ## Inherited appearance
 
 - Keep the supplied painted isometric slab and sprite artwork over the blue background (`#cdebfd`), with grid-aligned soil and depth-sorted objects. Visitors reuse farmer frames; cars use original Gemini-generated painted sprites, while butterflies remain small canvas shapes within that scene.
@@ -9,7 +11,7 @@ Recorded 2026-11-07. This is an evidence note for an ordinary extension, not a r
 - Local Fredoka at weights 500/600/700 remains the shared UI face, with system/sans-serif fallbacks. The observed hierarchy uses 18px sheet titles; 21px lesson headings (19px at the mobile breakpoint); 16px lesson prose with 1.5 line-height; 13–15px controls; and 10–12px metadata. Canvas speech uses Fredoka 500 at 13px in world coordinates.
 - Preserve rounded ivory HUD pills, 24px sheet corners, sand borders, earth text, green actions and their inset 3px darker bottom lips. Navigation keeps sprite illustrations and rounded ivory tiles. The existing depth treatments are retained by user direction; this note does not generalize detector warnings into rules for unrelated future surfaces.
 
-## Extension fit and responsive evidence
+## Historical Solana extension evidence
 
 Lessons and Orders use the existing bottom-sheet grammar. Weather, live/cached/demo rate labels, the separate read-only wallet line and sound controls use the existing HUD/material vocabulary. Ambient visitors, traffic, butterflies and animal-readiness bubbles remain subordinate to the painted farm.
 
@@ -24,6 +26,22 @@ Checked the current `game.js` asset-backed `drawCar`, cached `cloudStamp`, weath
 Visually checked all six corrected road captures: `out/vehicle-review/{desktop,mobile,user-647}.png` and `out/vehicle-review-alternate/{desktop,mobile,user-647}.png`, at the same three viewport sizes above. Compared the supplied road-detail reference at `C:/Users/User/AppData/Local/Temp/codex-clipboard-461a5be3-e6fe-4f1a-9b33-dddf12adea44.png`. Both vehicle types and directions now show their tyre footprints on the asphalt, clear of the painted slab lip. Also checked `out/cloud-review/{desktop,mobile,user-647,rain}.png`: soft cloud banks are more visible, with stronger opacity/shadows and extra banks in rain; the painted farm and HUD remain readable. The incumbent palette, typography, controls, slab and grid are preserved.
 
 The separate vehicle/cloud finish reviewer returned **SHIP** at this limited scope with no remaining material findings. The changed-file detector result for `game.js` was reported as `[]`, and the implementation check reported eight passing tests. These static captures do not certify motion quality or physical-device performance. The parent subsequently completed a 41.0-second, 12 fps full-demo recording with no captured console errors; see `VERIFICATION.md`. The earlier full UI evidence remains recorded above.
+
+## Arc-current extension evidence — 2026-11-08
+
+The user-approved Arc testnet edition was developed through Arc Studio CLI. It retains the painted slab, sprites, grid, blue background, Fredoka, ivory sheets, earth text, green controls and same-hue bottom button lips. The Arc wallet line and study-badge panel extend the existing HUD and Learn sheet; they establish no new token system or visual identity. No PRODUCT.md or DESIGN.md world files exist for this extension.
+
+Checked `public/cozy/arc.js`, `arc-deployment.json`, and the changed `index.html`, `game.js` and `demo.js`. This runtime uses an EVM wallet and reads native USDC with 18-decimal units on Arc testnet, chain 5042002. Wallet test USDC is visibly separate from simulated farm USDC. All farm APYs are fixed demo examples; there is no live yield integration or real yield. Lesson 5 now explains USDC gas on Arc. Seven optional badge slots become available in the UI after the corresponding local quiz; the contract stores self-reported study records, not verified qualifications. Claims provide no financial or farm reward, require wallet confirmation and disclose the test-USDC network fee and lack of cash value.
+
+The client checks RPC/wallet network and deployed bytecode before claims, then checks receipt, transaction, event and claimed mask before reporting confirmation. Source inspection also covered pending-claim, rejection and account/network-change guards. This is a description of implemented checks, not a financial or security audit.
+
+- Contract evidence: [Arc testnet badge contract](https://explorer.testnet.arc.io/address/0xc8658f2451928d02ae42f8d113e37d6c4c673853). The implementation verification supplied to this pass confirmed HTTP 200, the matching address and official RPC chain 5042002; `arc-deployment.json` records the same address/network.
+
+Visually checked all 13 current captures: `.impeccable/review/screenshots/{desktop,mobile,user-647}.png`, the corresponding three `-learn.png` captures and `rain.png`; plus `.impeccable/review/badges/{desktop,mobile,user-647}-badge-ready.png` and the corresponding three `-rejected.png` captures. Viewports are 1280×720, 390×844 and 647×764, with rain at 647×764. Both directories' `report.json` files record fitting HUD/navigation, matching body/viewport widths and no JavaScript errors. Badge-ready and cancelled-request states preserve the ivory sheet, readable disclosure, contract link and separate wallet line at all three sizes. The independent Arc finish reviewer returned **SHIP** for this 13-capture scope with no material findings.
+
+Implementation evidence supplied to this pass reports 16 passing local tests, 46 contract tests reported by Studio, an independent source compilation exactly matching runtime bytecode, and a completed approximately 41-second, 12 fps recording without captured errors. The detector reported only inherited 10px metadata and same-hue 3px button-lip warnings, retained under the user's incumbent-style direction.
+
+Review limits: a real external-wallet signed badge claim was not tested because the Studio faucet required unavailable developer-admin permission. Badge screenshots use a controlled wallet fixture for public address `0x1111111111111111111111111111111111111111` with live read-only RPC data; the displayed balance is not the user's wallet. Rejection screenshots demonstrate the fixture's cancelled-request UI, not a completed external-wallet transaction. Static review does not certify motion quality, physical-device performance, wallet-extension compatibility or contract security. Historical live Solana rate/wallet observations above do not describe the Arc runtime.
 
 ## Limits retained, not canonized
 

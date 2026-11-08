@@ -1,83 +1,35 @@
-# Verification — 2026-11-07
+# Arc edition verification
 
-## Automated
+2026-11-08. Separate arc-edition worktree; the original Solana main/production is unchanged.
 
-`node --test tests/game.test.mjs`: **8 tests passed**, zero failures. Uses isolated VM state and Node built-ins only; no game debug hooks are installed.
+## Contract evidence
 
-- Exact USDC reserve/mints, decimal-to-percent conversion, Meteora percentage preservation, Jito latest daily point and valid zero rates.
-- Demo makes no rate requests; failed reads remain demo; expired live data reverts to fixed demo placeholders.
-- Plant two wheat → mature → harvest to inventory → deliver order → replace order → consume exactly one 1.25× boost; duplicate delivery cannot pay twice; save reload preserves state.
-- Lesson 3 unlocks Carrot; lesson 5 plus the existing level unlocks Pumpkin; repeated correct answers cannot repay.
-- Rain gives exactly 10% faster growth and integrates correctly over a weather boundary.
-- Wallet accounts are summed using integer USDC units; only `getTokenAccountsByOwner` is sent; zero, RPC failure and disconnect states are handled.
-- Ready animal produce collects once and can be sold; all villager waypoints lie on painted paths.
-- Simulated Phantom rejection resets the Connect button without any RPC call; a successful read and account disconnect update the separate wallet line.
+- [Contract on Arc testnet](https://explorer.testnet.arc.io/address/0xc8658f2451928d02ae42f8d113e37d6c4c673853)
+- [Deployment transaction](https://explorer.testnet.arc.io/tx/0xb8936b9aceb5959a559d974ca8f84e1b9590b143debe817cbfe7e0633bdecc18)
+- [Arc Studio workspace](https://studio.arc.io/app/64b0aeab-08e0-4ded-ba95-fe70d83bb956)
 
-`node --check public/cozy/game.js`, `rates.js`, `demo.js` and `capture-demo.mjs`: syntax checked.
+Arc Studio CLI 1.2.2 generated, tested and deployed StableAcresStudyBadges. Official RPC verified chain ID 5042002, successful deployment receipt and 673 bytes of runtime code. Explorer returned HTTP 200 with the exact address.
 
-## Real read-only endpoints
+Independent local solc 0.8.28 compilation with matching optimizer/EVM/metadata/remapping settings matched deployed runtime byte-for-byte. Keccak256: 0x3111bf25f2d5c2144d7fa4257ae2c5f52c0385b88492f7303edbcf134391f4a6. Selectors and event topic match. Evidence: contracts/evidence/independent-verification.json.
 
-All four official rate endpoints returned HTTP 200 with usable browser CORS on 2026-11-07. Exact endpoints and field conversions are recorded in `public/cozy/rates.js`; full normalized cache records are in `apys.json`.
+Read-only eth_call simulations verified valid zero-value claim behavior, invalid IDs 0/8/255 reverting and nonzero value reverting. They changed no state. Studio's retained Foundry output reports **46 passing tests**, including fuzz tests, independent accounts, every bit, duplicates, invalid IDs, indexed events and nonpayable behavior. These ran in Studio, not a local Foundry installation.
 
-| Source | Verified response shape | Example at verification |
-| --- | --- | --- |
-| Kamino main market | Array; exact USDC reserve `D6q6…J59`; `supplyApy` decimal string | ~3.865% APY |
-| Meteora SOL–USDC | Exact `address`, canonical token X/Y mints, `apy` numeric percentage | ~86.976% APY, based on 24h fees; highly variable |
-| JitoSOL | `apy: [{data, date}]`; latest date; `data` decimal fraction | ~4.939% APY |
-| Meteora USDC–USDT | Exact `address`, canonical token X/Y mints, `apy` numeric percentage | ~0.274% APY |
+## Client and game
 
-These are observations, not promised returns or fixed future values.
+`node --test tests/*.test.mjs`: **16 passed**. Coverage: native-USDC 18-decimal integer formatting; connection-only reads; wrong wallet/RPC chain; bytecode mismatch; exact receipt/transaction/event/state checks; rejection/revert; duplicate/unfinished-lesson prevention; pending timeout/resubmission lock; stale account reads/disconnected connections; farming/orders/boosts; quiz gates; weather integration and animal produce. Syntax checks pass.
 
-The actual `readUSDC` function was extracted into an isolated temporary Node evaluation and called against public mainnet owner `5rCf1DM8LjKTw4YqhnoLcngyZYeNnQqztScTogYHAS6`. It returned **1062674.44 USDC** at the later check. An earlier raw RPC call returned two USDC token accounts, proving the parser must sum all accounts. This is a public pool account, not the owner's wallet. No private keys, wallet signature, fund movement or persistent debug hook were used.
+All crop rates are labelled demo examples. Solana live-rate/cache and wallet integrations were removed from this edition. Normal farming and deterministic recording make no APY or wallet requests. No runtime npm dependency/framework/app build was introduced.
 
-Vibe Station returned HTTP 200 and CORS `*`. Foundation mainnet returned 403 here; PublicNode required a personal token for indexed reads; dRPC required a paid plan. The latter two are not shipped as fallbacks.
+## Browser and recording
 
-## Interactive browser checks
+Isolated headless Chrome captured farm, Orders, Learn and rain at 1280×720, 390×844 and 647×764. Bounds fit without document overflow; no captured JavaScript exceptions. Additional visible Learn-panel captures under .impeccable/review/badges/ show ready and cancelled controls at each size.
 
-In-app browser on the local static build:
+The badge fixture injected a read-only/rejecting EVM test provider for public address 0x1111111111111111111111111111111111111111. This is **not the builder's wallet** and does not establish ownership. Actual RPC reads checked test-USDC balance, exact contract code and mask. The fixture rejected transaction requests and sent no transaction. Cancellation retained 0/7 recorded and an available retry.
 
-- Loaded all four rates with `Live` and freshness labels in Vault; crop bubble linked the official source.
-- Completed the LP lesson, observed Carrot unlock and one Study Star; repeated the answer and observed no extra coins.
-- Planted two wheat through actual canvas clicks, harvested both, delivered Mara's order for 34 coins and XP, and observed the next wheat bubble showing `× 1.25 order boost`.
-- Clicked **What's this?** on wheat and saw the lending lesson.
-- Audio decoded successfully after a gesture; music off and volume 0 persisted through reload. Controls restored to music on / 45%; full credits visible. Browser console check was empty. Physical listening/iOS interruption behavior was not independently verified.
-- No-Phantom state visibly showed `Phantom not found · demo play available`.
-- Phone-sized rain view showed streaks, tint, and the `Rain · +10% growth` chip.
+`out/stable-acres-arc-demo.mp4`: **41.0 seconds**, 1920×1080, 12 fps, full deterministic demo complete with no console errors. README screenshot refreshed at 12 seconds. This is a functional capture, not a 60 fps performance benchmark.
 
-Headless screenshot matrix (`node scripts/snapshot-ui.mjs`): 1280×720, 390×844 and 647×764. Captured farm, Orders and LP lesson at each size plus rain. HUD/navigation bounds and document overflow checks passed; zero JavaScript exceptions. External HTTPS requests were blocked during these screenshots to exercise the cache path. Screenshots and bounds report are ignored under `.impeccable/review/screenshots/`.
+Fresh scoped visual review: **SHIP**, all 13 required captures, both reports and relevant source inspected. No material findings. Inherited small metadata/button lips retained under the existing brief. This is not a contract audit, external-wallet signature, physical-device or full accessibility certification.
 
-The first sandboxed preview later stopped responding; checks resumed using an elevated loopback-only server. The first sandboxed recorder could not connect to Chrome; rerunning with the local browser permission succeeded. These were execution-environment limits, not application errors.
+## Remaining signed-claim check
 
-Independent finish review: **ship** for all ten captures and sampled UI source, with no material findings. `DESIGN-NOTES.md` records preserved visual decisions and the exact evidence reviewed. Tiny metadata and incomplete canvas accessibility remain documented limitations; the existing same-hue button lips were deliberately preserved.
-
-## Recording
-
-`node capture-demo.mjs`: **completed at 40.1 seconds**, 60 fps, 1920×1080 H.264 MP4, zero captured console errors. Output: `out/stable-acres-demo.mp4`. The recorder also saved the README screenshot at 12 seconds. Demo uses local assets/fonts, seeded randomness, fixed demo rates, a fixed virtual-clock origin and silent audio.
-
-## Painted traffic and overhead clouds
-
-Original painted pickup/hatchback assets were generated in Gemini in the owner's Chrome browser. Exact prompt, style inputs and processing are in `public/cozy/VEHICLE-ART.md`; the raw sheet remains ignored locally.
-
-The owner's screenshot exposed verge overlap. The northeast lane now uses j14.65 (southwest remains j14.1). Road close-ups at 1280×720, 390×844 and 647×764 cover both vehicle types in both directions: `out/vehicle-review/` and `out/vehicle-review-alternate/`. Normal farm/cloud captures at the same sizes plus forced rain are under `out/cloud-review/`. All bounds checks passed with zero JavaScript exceptions. An initial capture-helper rain assertion failed because its URL contained two conflicting weather values; the helper now replaces the parameter and the complete captures pass.
-
-Scoped independent review returned **ship** after inspecting all ten new captures, the owner's screenshot, reports and current lane/cloud code: tyre contacts on asphalt, appropriate painted style and transparency, overhead clouds stronger in rain, and readable farm/HUD. This is scoped appearance evidence, not a physical-device performance test. Eight automated tests, JavaScript syntax and the changed-target design detector passed (no detector findings). The user's running local game was refreshed to version 2026.11.07.5.
-
-Final version 2026.11.07.5 recording: `out/painted-traffic-clouds-demo.mp4`, 1920×1080, 12 fps, **41.0 seconds**, complete scripted demo with zero captured console errors. The recorder refreshed `public/cozy/screenshot.jpg` at 12 seconds. This is a functional animation capture, not a 60 fps performance benchmark.
-
-Source inspection confirms the existing lighting follows the device's local clock unless `t=day|dusk|night` is set. Midnight shares the night tint. Lighting has no input to APY or simulated earnings; rain affects crop growth only. The current test tab uses `t=day`.
-
-## Not verified / deferred
-
-- Real Phantom extension approval/rejection/account switching and physical mobile audio.
-- Broad device/performance/accessibility testing or financial/security audit.
-- Cow art and milk production: image generation reached its usage limit, so this feature was not shipped.
-
-See `LIMITATIONS.md` for why each gap matters, fixes with effort estimates, and ranked jam/product improvements.
-
-## Live publication — 2026-11-08
-
-The owner authorized publication to `https://github.com/JWattjr/Stable-acres.git`, superseding the earlier deferral. GitHub `main` received the existing history through `82c35496b326ebd3647e08a55235222210dac126`. Vercel project `prj_nqVEbF4bayk6mBEAK4E3xkWmx493` belongs to `wattxs-projects` / `team_4mmvifpyuNjvwkcbbJvmxNIc` and is Git-connected to that repository. Node 24, Other framework, `node scripts/fetch-apys.mjs`, no install command and `public/cozy` output were verified before deployment.
-
-Deployment `dpl_2iagGP49HyeWshDcwbBTzyHtY3GB` reached READY, was checked through authenticated Vercel curl and promoted to https://stable-acres.vercel.app/. The public root returns HTTP 200 without a login; deployed `game.js` SHA-256 matches the source. All 73 public assets returned HTTP 200 and matched source bytes, except `apys.json`, whose four valid entries were refreshed during deployment. Reports are ignored under `out/live-assets-report.json` and `out/live-review/`.
-
-Eight automated tests passed and a release scan of all 90 tracked files found no credential patterns. An isolated headless browser loaded the public site at 1280×720, 390×844 and 647×764, exercised planting, Orders and the LP lesson, and captured forced rain. All four protocol feeds showed Live; HUD/navigation bounds fit and no JavaScript exceptions occurred. An early screenshot run reused the previous page's ready state while HTTPS navigation was pending; `scripts/snapshot-ui.mjs` now waits for the requested loader and all sprites. The completed phone capture visibly includes the farm. The in-app browser control tool was unavailable in this session; verification used an isolated browser profile instead. Real Phantom and physical-mobile audio limitations remain as listed above.
+Studio's faucet refused funding a disposable sandbox test wallet: “Faucet drip requires the DEVELOPER_ADMIN_DEFAULT_ROLE on at least one available entity for this user.” Studio reported stopping before any claim broadcast; no claim hash or smoke artifact exists. No role/permission was changed. Funded external-wallet signing, wallet-native fees, replacement transactions and physical-mobile audio remain unverified. No real-money deposits/approvals/transfers or mainnet actions exist.

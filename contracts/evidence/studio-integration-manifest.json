@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "contract": "StableAcresStudyBadges",
+  "purpose": "Self-reported commemorative study-badge registry. Callers claim their own badges; no quiz is cryptographically verified.",
+  "chainId": 5042002,
+  "chainName": "Arc Testnet",
+  "network": "ARC-TESTNET",
+  "contractAddress": "0xc8658f2451928d02ae42f8d113e37d6c4c673853",
+  "deployTxHash": "0xb8936b9aceb5959a559d974ca8f84e1b9590b143debe817cbfe7e0633bdecc18",
+  "deployBlockNumber": 71425559,
+  "deployReceiptStatus": "success",
+  "deployedBy": "Arc Studio sandbox test wallet (testnet only, via Circle Smart Contract Platform)",
+  "addressAppearsInDeployReceiptLogs": true,
+  "explorer": {
+    "addressUrl": "https://explorer.testnet.arc.io/address/0xc8658f2451928d02ae42f8d113e37d6c4c673853",
+    "txUrl": "https://explorer.testnet.arc.io/tx/0xb8936b9aceb5959a559d974ca8f84e1b9590b143debe817cbfe7e0633bdecc18"
+  },
+  "rpcUrl": "https://rpc.testnet.arc.io",
+  "abi": [
+    {
+      "type": "function",
+      "name": "claimBadge",
+      "inputs": [
+        {
+          "name": "lessonId",
+          "type": "uint8",
+          "internalType": "uint8"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "claimedMask",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "hasBadge",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "lessonId",
+          "type": "uint8",
+          "internalType": "uint8"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool",
+          "internalType": "bool"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "event",
+      "name": "BadgeClaimed",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "lessonId",
+          "type": "uint8",
+          "indexed": true,
+          "internalType": "uint8"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "error",
+      "name": "AlreadyClaimed",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidLesson",
+      "inputs": []
+    }
+  ],
+  "functionSelectors": [
+    {
+      "name": "claimBadge",
+      "signature": "claimBadge(uint8)",
+      "selector": "0xb5804373",
+      "stateMutability": "nonpayable"
+    },
+    {
+      "name": "claimedMask",
+      "signature": "claimedMask(address)",
+      "selector": "0x142f4cf0",
+      "stateMutability": "view"
+    },
+    {
+      "name": "hasBadge",
+      "signature": "hasBadge(address,uint8)",
+      "selector": "0x3af0c688",
+      "stateMutability": "view"
+    }
+  ],
+  "errorSelectors": [
+    {
+      "name": "AlreadyClaimed",
+      "selector": "0x646cf558"
+    },
+    {
+      "name": "InvalidLesson",
+      "selector": "0x16b76f49"
+    }
+  ],
+  "event": {
+    "name": "BadgeClaimed",
+    "signature": "BadgeClaimed(address,uint8)",
+    "topic0": "0xb436f61c776e1e0fbbf7f30319b7c9f88187cfb6a66184a6b3ab397aad562cba",
+    "indexed": [
+      "account",
+      "lessonId"
+    ]
+  },
+  "runtimeCode": {
+    "hashAlgorithm": "keccak256 (EVM state/code hash) over the eth_getCode runtime bytecode",
+    "hash": "0x3111bf25f2d5c2144d7fa4257ae2c5f52c0385b88492f7303edbcf134391f4a6",
+    "byteLength": 673,
+    "matchesLocalArtifact": true,
+    "verifiedAgainstChainId": 5042002
+  },
+  "compiler": {
+    "solcVersion": "0.8.28+commit.7893614a",
+    "configuredSolcVersion": "0.8.28",
+    "evmVersion": "cancun",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "metadataBytecodeHash": "ipfs",
+    "viaIR": false,
+    "pragma": "^0.8.20"
+  },
+  "tests": {
+    "framework": "forge test -vv",
+    "totalTests": 46,
+    "passed": 46,
+    "failed": 0,
+    "skipped": 0,
+    "fuzzRuns": 256,
+    "suite": "contracts/test/StableAcresStudyBadges.t.sol",
+    "fullOutput": "contracts/test-output.txt"
+  },
+  "review": {
+    "preset": "balanced",
+    "independentReviews": 2,
+    "findings": "none material",
+    "staticAnalysis": "Slither: informational solc-version note only"
+  },
+  "notes": [
+    "Testnet only. Test USDC has no cash value.",
+    "Not a security audit substitute; confirm the bytecode independently before relying on it."
+  ]
+}

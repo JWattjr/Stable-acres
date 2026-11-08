@@ -10,29 +10,29 @@ if (new URLSearchParams(location.search).has('debug')) window.__dbg = true; // d
 const DEMO_DAY_MS = 1000; // demo time-warp: 1 real second = 1 day of yield
 const STAKE = 10;         // USDC staked under each planted crop
 
-// Fixed demo rates; loadRates replaces each independently with a verified API/cache value.
+// Arc edition: fixed learning examples, not Arc protocol yields.
 const CROPS = {
-  wheat:      { name: 'Wheat',      grow: 20, cost: 5,  sell: 12, xp: 2, lvl: 1, pool: { token: 'USDC',      where: 'Kamino Lend',         apy: 6.2 } },
-  carrot:     { name: 'Carrot',     grow: 45, cost: 10, sell: 26, xp: 4, lvl: 1, pool: { token: 'SOL–USDC',  where: 'Meteora DLMM',        apy: 18.4 } },
-  pumpkin:    { name: 'Pumpkin',    grow: 90, cost: 20, sell: 55, xp: 7, lvl: 2, pool: { token: 'JitoSOL',   where: 'Jito liquid staking', apy: 7.9 } },
-  strawberry: { name: 'Strawberry', grow: 60, cost: 15, sell: 40, xp: 5, lvl: 3, pool: { token: 'USDC–USDT', where: 'Meteora stable pool', apy: 9.1 } },
+  wheat:      { name: 'Wheat',      grow: 20, cost: 5,  sell: 12, xp: 2, lvl: 1, pool: { token: 'USDC', where: 'Lending example', apy: 6.2 } },
+  carrot:     { name: 'Carrot',     grow: 45, cost: 10, sell: 26, xp: 4, lvl: 1, pool: { token: 'Token pair', where: 'Liquidity example', apy: 18.4 } },
+  pumpkin:    { name: 'Pumpkin',    grow: 90, cost: 20, sell: 55, xp: 7, lvl: 2, pool: { token: 'USDC', where: 'Savings example', apy: 7.9 } },
+  strawberry: { name: 'Strawberry', grow: 60, cost: 15, sell: 40, xp: 5, lvl: 3, pool: { token: 'Stablecoin pair', where: 'Stable-pool example', apy: 9.1 } },
 };
 const XP_FOR = l => 10 + (l - 1) * 15;
 // Editable lesson content: three small cards, one question, one first-completion reward.
 const LESSONS = [
   { title: 'What is a stablecoin?', short: 'USDC', cards: [
-    ['A dollar-shaped token', 'USDC is a digital token designed to track one US dollar. On Solana, it can move between wallet addresses.'],
+    ['A dollar-shaped token', 'USDC is a digital token designed to track one US dollar. On Arc, it can move between wallet addresses and pay network fees.'],
     ['Designed to stay steady', 'Circle backs USDC with reserves. USDC is redeemable 1:1 for US dollars.'],
-    ['Our farm is pretend money', 'The blue balance here is demo USDC. Connecting a wallet only reads its real mainnet USDC balance; planting never moves it.'],
+    ['Our farm is pretend money', 'The blue balance here is demo USDC. Your connected wallet shows separate Arc testnet USDC, which has no cash value. Planting never moves wallet funds.'],
   ], question: 'What does USDC aim to track?', options: ['One US dollar', 'The price of SOL', 'A guaranteed profit'], answer: 0, why: 'USDC is designed to track the US dollar, supported by reserve backing and 1:1 dollar redemption.' },
   { title: 'What is lending yield?', short: 'Lending', cards: [
-    ['A shared lending pot', 'A lending service such as Kamino lets people supply tokens that other people may borrow. Borrowers generally put up collateral: assets backing their loan.'],
+    ['A shared lending pot', 'A lending service lets people supply tokens that other people may borrow. Borrowers generally put up collateral: assets backing their loan.'],
     ['Where the interest comes from', 'Borrowers pay interest. Some goes to suppliers after protocol charges. When demand to borrow changes, the supply rate can change too.'],
-    ['A rate is a snapshot', 'Wheat shows the Kamino main-market USDC supply APY when available. The farm simulates earnings; real lending also has contract and withdrawal-liquidity risks.'],
+    ['A learning example', 'Wheat uses a fixed demo lending rate. This Arc edition has no live yield integration or deposits. Real lending also has contract and withdrawal-liquidity risks.'],
   ], question: 'Who mainly pays lending interest?', options: ['The wheat sprite', 'Borrowers', 'Every wallet that connects'], answer: 1, why: 'Borrowers pay interest; the protocol distributes a share to suppliers.' },
   { title: 'What is an LP?', short: 'Liquidity pools', unlock: 'Carrot', cards: [
     ['A stall with two baskets', 'A liquidity pool holds tokens that traders can swap between. An LP, or liquidity provider, supplies tokens to that pool.'],
-    ['Traders pay a small fee', 'Meteora pools earn trading fees. SOL–USDC uses SOL and USDC. DLMM splits liquidity into price bands, so a position outside the active price may stop earning fees.'],
+    ['Traders pay a small fee', 'Pools can earn fees from swaps between their tokens. Some concentrate liquidity into price ranges; a position outside the active range may stop earning fees. Carrot is a simulated example.'],
     ['Fees are not the whole result', 'Your token mix and its value can change. A displayed pool APY estimates recent fees over a year; it is neither a promise nor your personal return. Carrot unlocks after this quiz.'],
   ], question: 'Where do pool trading fees come from?', options: ['Guaranteed rewards', 'The crop timer', 'People swapping tokens'], answer: 2, why: 'Traders pay swap fees. Price changes and position range also affect an LP’s result.' },
   { title: 'Impermanent loss', short: 'The fruit stand', cards: [
@@ -40,66 +40,27 @@ const LESSONS = [
     ['Then apples become dearer', 'Shoppers take apples and leave more oranges as prices change. Your share now contains a different mix than if you had kept your original baskets.'],
     ['Compare with simply holding', 'Your share can be worth less than holding the original mix. That difference is called impermanent loss. Withdrawing can lock it in; fees may or may not cover it. Concentrated pools can amplify this risk.'],
   ], question: 'Do trading fees always cover impermanent loss?', options: ['Yes, always', 'No, they may not', 'Only when it rains'], answer: 1, why: 'Fees can help, but do not guarantee you outperform holding the original tokens.' },
-  { title: 'Liquid staking', short: 'JitoSOL', unlock: 'Pumpkin', cards: [
-    ['Helping secure Solana', 'Staking delegates SOL to validators, the computers that help run Solana. Staking rewards vary with network conditions and validator performance.'],
-    ['A token for a staked share', 'JitoSOL represents a share of SOL staked through Jito’s pool. Rewards generally increase how much SOL each JitoSOL represents rather than adding more tokens to your wallet.'],
-    ['Liquid does not mean risk-free', 'You can trade JitoSOL, but its market price can differ from its redemption value. Pool software, validator and unstaking risks remain. JitoSOL is SOL exposure, not a stablecoin.'],
-  ], question: 'What does JitoSOL represent?', options: ['A share of staked SOL', 'A dollar guarantee', 'USDC in a bank'], answer: 0, why: 'JitoSOL represents staked SOL. Its dollar value can rise or fall with SOL.' },
+  { title: 'USDC gas on Arc', short: 'Network fees', unlock: 'Pumpkin', cards: [
+    ['A small fee to record a badge', 'Arc uses USDC for network fees, often called gas. An optional study-badge claim is a transaction, so your wallet shows its fee before you confirm.'],
+    ['One wallet balance', 'The same USDC balance can cover network fees and supported token actions. Our game shows it once. Holding USDC or paying gas does not automatically earn interest.'],
+    ['Practice on testnet', 'This edition connects only to Arc testnet. Test USDC has no cash value. Badges are self-reported study records; the farm coins and crop earnings stay simulated.'],
+  ], question: 'What pays network fees on Arc?', options: ['USDC', 'Harvested wheat', 'A second hidden gas token'], answer: 0, why: 'Arc uses USDC for network fees. Here, only testnet USDC is involved.' },
   { title: 'APY vs APR', short: 'Reading rates', cards: [
     ['Both look a year ahead', 'APR is an annual rate without compounding. APY includes an assumption that earnings are reinvested and earn more. They are different ways to describe a rate.'],
     ['Today is not a promise', 'A rate based on the last day or week stretches that short period into a yearly estimate. Borrowing demand, trading activity and staking rewards keep changing.'],
-    ['Read the label', 'Our pool labels link to the source and show freshness. Demo rates are fixed examples. Farm yield uses a simple estimate and a fast clock; order boosts change only the demo reward.'],
+    ['Read the label', 'Every farm rate in this Arc edition is a fixed demo example, not a live protocol return. Farm yield uses a simple estimate and a fast clock; order boosts change only the demo reward.'],
   ], question: 'Which rate includes compounding assumptions?', options: ['APR', 'Both are fixed guarantees', 'APY'], answer: 2, why: 'APY includes compounding assumptions. Neither rate guarantees future earnings.' },
   { title: 'Risk basics', short: 'Before real money', cards: [
     ['Software can fail', 'A smart contract is code that controls on-chain assets. Bugs, exploits or a compromised service can cause losses, even in an audited protocol.'],
     ['Backing and market prices', 'Stablecoins are designed to track their target currency. During market stress, exchange prices can differ from that target; this is called a depeg. Lost keys and limited withdrawal access are separate risks.'],
-    ['Keep your choices yours', 'Never invest money you cannot afford to lose. Understand an action, its fees and how to withdraw before signing. This prototype asks for no signature and takes no deposits.'],
+    ['Keep your choices yours', 'Understand an action and its fees before confirming it in a wallet. Planting uses pretend money. Optional study badges request a testnet transaction; this game takes no deposits.'],
   ], question: 'What does an audit guarantee?', options: ['No losses', 'It does not guarantee safety', 'A fixed APY'], answer: 1, why: 'An audit may reduce some risks; it cannot remove all bugs, market risks or losses.' },
 ];
 const CROP_LESSON = { wheat: 1, carrot: 2, pumpkin: 4, strawberry: 2 };
 const REQUIRED_LESSON = { carrot: 2, pumpkin: 4 };
-const rateState = Object.fromEntries(Object.keys(CROPS).map(k => [k, { mode: 'demo', source: CROPS[k].pool.where }]));
-const DEMO_APYS = Object.fromEntries(Object.entries(CROPS).map(([k, c]) => [k, c.pool.apy]));
-const RATE_MAX_AGE = 24 * 60 * 60 * 1000;
-function rateFresh(r) {
-  return r && Number.isFinite(r.apy) && r.apy >= 0 && r.apy <= 10000 &&
-    [r.updatedAt, r.observedAt].every(d => Number.isFinite(Date.parse(d)) && Date.now() - Date.parse(d) >= -300000 && Date.now() - Date.parse(d) < RATE_MAX_AGE);
-}
-function rateNote(k) {
-  const r = rateState[k];
-  if (r.mode === 'demo' || !rateFresh(r)) return 'Demo rates';
-  const min = Math.max(0, Math.floor((Date.now() - Date.parse(r.observedAt)) / 60000));
-  return `${r.mode === 'live' ? 'Live' : 'Cached'} · updated ${min < 1 ? 'just now' : min < 60 ? min + ' min ago' : Math.floor(min / 60) + 'h ago'}`;
-}
-async function loadRates() {
-  if (DEMO) return; // no protocol/cache requests: frame-exact, offline-safe demo
-  const apply = (key, r, mode) => {
-    if (!rateFresh(r) || r.url !== StableRates.sources[key].url || r.source !== StableRates.sources[key].source) return;
-    CROPS[key].pool.apy = r.apy; rateState[key] = { ...r, mode };
-  };
-  let cache = {};
-  try { cache = JSON.parse(localStorage.getItem('stable-acres-rates') || '{}'); } catch {}
-  Object.keys(CROPS).forEach(k => apply(k, cache[k], 'cached'));
-  try {
-    const r = await fetch('apys.json', { signal: AbortSignal.timeout(3000) });
-    if (r.ok) { const j = await r.json(); Object.keys(CROPS).forEach(k => { if (!rateFresh(cache[k]) || Date.parse(j[k]?.updatedAt) > Date.parse(cache[k].updatedAt)) apply(k, j[k], 'cached'); }); }
-  } catch {}
-  await Promise.allSettled(Object.keys(CROPS).map(async k => {
-    try { const r = await StableRates.fetchRate(k); apply(k, r, 'live'); cache[k] = r; } catch {}
-  }));
-  try { localStorage.setItem('stable-acres-rates', JSON.stringify(cache)); } catch {}
-  renderVault(); if (bubblePlot) renderBubble();
-}
-function expireRates() {
-  for (const [k, r] of Object.entries(rateState)) if (r.mode !== 'demo' && !rateFresh(r)) {
-    CROPS[k].pool.apy = DEMO_APYS[k]; rateState[k] = { mode: 'demo', source: CROPS[k].pool.where };
-  }
-}
+const rateNote = () => 'Demo APY · learning example';
 const escapeHTML = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-function rateSource(k) {
-  const r = rateState[k];
-  return r.url ? `<a href="${escapeHTML(r.url)}" target="_blank" rel="noopener">${escapeHTML(r.source)}</a>` : escapeHTML(r.source);
-}
+const rateSource = k => escapeHTML(CROPS[k].pool.where);
 
 // Things you can buy and place. w/h = footprint in tiles.
 // Buildings are fitted from their measured ground base (sprites/fit.json) so they sit inside their own tiles.
@@ -153,12 +114,12 @@ const STARTER = [
 let uid = 1;
 const S = { coins: 300, usdc: 100, lvl: 1, xp: 0, objects: STARTER.map(o => ({ ...o })) };
 if (DEMO) Object.assign(S, { coins: 1500, lvl: 3 });
-else try { Object.assign(S, JSON.parse(localStorage.getItem('stable-acres-2') || '{}')); } catch {}
+else try { Object.assign(S, JSON.parse(localStorage.getItem('stable-acres-arc-1') || '{}')); } catch {}
 S.lessons ||= []; S.studyStars ||= 0;
 S.inventory ||= {}; S.boosts ||= {}; S.orders ||= []; S.orderSerial ||= 0; S.delivered ||= 0;
 S.produce ||= { egg: 0, wool: 0 };
 S.objects.forEach(o => { o.id ||= uid++; uid = Math.max(uid, o.id + 1); });
-const save = () => { if (!DEMO) try { localStorage.setItem('stable-acres-2', JSON.stringify(S)); } catch {} };
+const save = () => { if (!DEMO) try { localStorage.setItem('stable-acres-arc-1', JSON.stringify(S)); } catch {} };
 function seedLock(key) {
   const required = REQUIRED_LESSON[key];
   if (!DEMO && required != null && !S.lessons.includes(required)) return `Learn: ${LESSONS[required].title} to unlock`;
@@ -609,6 +570,7 @@ function renderBubble() {
 let lessonId = null, lessonCard = 0, lessonFeedback = '';
 function openLesson(id) { closeBubble(); lessonId = id; lessonCard = 0; lessonFeedback = ''; openSheet('learn'); }
 function renderLearn() {
+  renderArcBadges();
   $('studyStars').textContent = `${S.studyStars} Study Star${S.studyStars === 1 ? '' : 's'} · ${S.lessons.length}/${LESSONS.length} lessons`;
   if (lessonId == null) {
     $('lessonContent').innerHTML = LESSONS.map((l, i) => `<button class="lesson-row" data-lesson="${i}"><span><b>${i + 1}. ${l.title}</b><small>${l.unlock ? `Unlocks ${l.unlock} · ` : ''}3 cards + a quick question</small></span><span>${S.lessons.includes(i) ? '✓ Studied' : 'Start →'}</span></button>`).join('');
@@ -692,69 +654,61 @@ function burst(el) { // little gold sparks flying out of a HUD element
 }
 const bump = el => el.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1)' }], { duration: 200 });
 
-// ---------- wallet (read-only; never requests a signature or moves funds) ----------
-// https://solana.com/docs/rpc/http/gettokenaccountsbyowner — jsonParsed, mainnet USDC mint.
-const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
-// Vibe Station returned jsonParsed accounts + CORS; the Foundation endpoint can rate-limit/block.
-const WALLET_RPCS = ['https://public.rpc.solanavibestation.com', 'https://api.mainnet-beta.solana.com'];
-let walletAddress = null, walletRead = 0, walletProvider = null;
-async function readUSDC(address) {
-  let lastError;
-  for (const url of WALLET_RPCS) try {
-    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(5000),
-      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getTokenAccountsByOwner', params: [address, { mint: USDC_MINT }, { encoding: 'jsonParsed', commitment: 'confirmed' }] }) });
-    if (!r.ok) throw Error(`RPC HTTP ${r.status}`);
-    const j = await r.json();
-    if (j.error || !Array.isArray(j.result?.value)) throw Error(j.error?.message || 'Invalid RPC response');
-    let raw = 0n;
-    for (const a of j.result.value) {
-      const info = a.account?.data?.parsed?.info, amount = info?.tokenAmount;
-      if (info?.mint !== USDC_MINT || info.owner !== address || amount?.decimals !== 6 || !/^\d+$/.test(amount.amount)) throw Error('Unexpected token account');
-      raw += BigInt(amount.amount);
-    }
-    return `${raw / 1000000n}.${(raw % 1000000n / 10000n).toString().padStart(2, '0')}`;
-  } catch (e) { lastError = e; }
-  throw lastError;
+// ---------- Arc testnet wallet + optional onchain study records ----------
+const arcWallet = DEMO ? null : StableArc.createClient({ completed: () => S.lessons, onChange: () => renderArcWallet() });
+function renderArcBadges() {
+  const panel = $('badgePanel');
+  if (DEMO) { panel.innerHTML = '<h4>Arc study badges</h4><p class="sub">Optional testnet badges are available in normal play. This recording uses no wallet or network.</p>'; return; }
+  const w = arcWallet.getState(), connected = !!w.account;
+  const recorded = w.mask == null ? null : Array.from({length: 7}, (_, i) => !!(w.mask & 1n << BigInt(i))).filter(Boolean).length;
+  const rows = S.lessons.slice().sort((a,b) => a-b).map(i => {
+    const has = w.mask != null && !!(w.mask & 1n << BigInt(i));
+    const pending = w.pending === i + 1;
+    const label = has ? 'Recorded on Arc' : pending ? w.txHash ? 'Confirming…' : 'Confirm in wallet…' : 'Record badge';
+    return `<div class="badge-row"><span>${i + 1}. ${escapeHTML(LESSONS[i].title)}</span><button class="textbtn" data-claim-badge="${i+1}" ${has || w.busy || w.pending != null || !w.verified ? 'disabled' : ''}>${label}</button></div>`;
+  }).join('');
+  panel.innerHTML = `<h4>Arc study badges${recorded == null ? '' : ` · ${recorded}/7 recorded`}</h4>
+    <p class="sub">Optional, self-reported study records. Each claim needs wallet confirmation and a test-USDC network fee. Test USDC has no cash value; badges give no farm rewards.</p>
+    <div class="badge-controls"><button class="textbtn" data-arc-connect ${w.busy ? 'disabled' : ''}>${!connected ? 'Connect wallet' : w.chainId !== StableArc.network.id ? 'Switch to Arc testnet' : 'Refresh badges'}</button>${connected ? '<button class="textbtn" data-arc-disconnect>Disconnect</button>' : ''}<a href="https://faucet.circle.com/" target="_blank" rel="noopener">Test-USDC faucet</a></div>
+    <p class="sub" role="status">${escapeHTML(w.problem || (!connected ? 'Connect a wallet to view your onchain records.' : w.pending ? w.txHash ? 'Submitted · waiting for a verified confirmation.' : 'Review the testnet transaction in your wallet.' : w.verified ? 'Contract and network verified · ready to record completed lessons.' : 'Reading Arc testnet…'))}</p>
+    ${rows || '<p class="sub">Finish a lesson to make its badge available here.</p>'}
+    ${w.deployment ? `<p class="sub"><a href="${StableArc.network.explorer}/address/${w.deployment.address}" target="_blank" rel="noopener">View badge contract</a></p>` : ''}
+    ${w.txHash ? `<p class="sub"><a href="${StableArc.network.explorer}/tx/${w.txHash}" target="_blank" rel="noopener">View transaction</a></p>` : ''}`;
 }
-async function showWallet(address) {
-  const request = ++walletRead; walletAddress = address;
-  $('wallet').textContent = address ? address.slice(0, 4) + '…' + address.slice(-4) : 'Connect wallet';
-  $('walletBalance').textContent = address ? 'Reading mainnet USDC…' : 'Read-only · Solana mainnet';
-  if (!address) return;
-  try {
-    const balance = await readUSDC(address);
-    if (request === walletRead) $('walletBalance').textContent = `Wallet: ${balance} USDC · mainnet`;
-  } catch {
-    if (request === walletRead) $('walletBalance').textContent = 'Wallet balance unavailable · tap to retry';
-  }
+function renderArcWallet() {
+  if (DEMO) { $('wallet').textContent = 'Arc testnet'; $('walletBalance').textContent = 'Recording · wallet disabled'; return; }
+  const w = arcWallet.getState();
+  $('wallet').disabled = w.busy;
+  $('wallet').textContent = !w.account ? 'Connect wallet' : w.chainId !== StableArc.network.id ? 'Switch to Arc testnet' : w.account.slice(0, 6) + '…' + w.account.slice(-4);
+  $('walletBalance').textContent = w.balance != null ? `Wallet: ${w.balance} USDC · testnet` : w.problem || (w.account ? 'Reading Arc testnet…' : 'Arc testnet · optional badges');
+  renderArcBadges();
 }
-$('walletBalance').onclick = () => { if (walletAddress) showWallet(walletAddress); };
-$('wallet').onclick = async () => {
-  if (DEMO) { toast('Recording mode · wallet reads disabled'); return; }
-  if (walletAddress) { showWallet(walletAddress); return; }
-  const sol = window.phantom?.solana || window.solana;
-  if (!sol?.isPhantom) { $('walletBalance').textContent = 'Phantom not found · demo play available'; toast('Install Phantom to read a wallet balance'); return; }
-  $('wallet').disabled = true;
-  try {
-    const r = await sol.connect();
-    if (walletProvider !== sol) {
-      walletProvider = sol;
-      sol.on?.('accountChanged', a => showWallet(a?.toString() || null));
-      sol.on?.('disconnect', () => showWallet(null));
-    }
-    await showWallet(r.publicKey.toString());
+async function connectArcWallet() {
+  if (DEMO) { toast('Recording mode · wallet disabled'); return; }
+  const w = arcWallet.getState();
+  if (!w.account) await arcWallet.connect();
+  else if (w.chainId !== StableArc.network.id) await arcWallet.switchNetwork();
+  else await arcWallet.refresh();
+}
+$('wallet').onclick = connectArcWallet;
+$('walletBalance').onclick = () => { if (arcWallet?.getState().account) arcWallet.refresh(); };
+$('badgePanel').onclick = async e => {
+  const button = e.target.closest('button'); if (!button || DEMO) return;
+  if (button.hasAttribute('data-arc-connect')) return connectArcWallet();
+  if (button.hasAttribute('data-arc-disconnect')) return arcWallet.disconnect();
+  if (button.dataset.claimBadge) {
+    try { await arcWallet.claim(Number(button.dataset.claimBadge)); }
+    catch (error) { toast(error.code === 4001 ? 'Wallet request cancelled' : error.message); }
   }
-  catch { toast('Wallet connection cancelled'); }
-  finally { $('wallet').disabled = false; }
 };
 
 // ---------- local, licensed Web Audio (including iOS volume control) ----------
 const audioPrefs = { music: true, effects: true, volume: 45 };
-try { Object.assign(audioPrefs, JSON.parse(localStorage.getItem('stable-acres-audio') || '{}')); } catch {}
+try { Object.assign(audioPrefs, JSON.parse(localStorage.getItem('stable-acres-arc-audio') || '{}')); } catch {}
 audioPrefs.volume = Math.max(0, Math.min(100, Number(audioPrefs.volume) || 0));
 let ac, musicGain, effectsGain, musicSource, audioLoading, audioStarted = false;
 const audioBuffers = {};
-function saveAudio() { if (!DEMO) try { localStorage.setItem('stable-acres-audio', JSON.stringify(audioPrefs)); } catch {} }
+function saveAudio() { if (!DEMO) try { localStorage.setItem('stable-acres-arc-audio', JSON.stringify(audioPrefs)); } catch {} }
 function applyAudio() {
   if (ac) {
     musicGain.gain.setTargetAtTime(audioPrefs.music ? audioPrefs.volume / 100 * .45 : 0, ac.currentTime, .08);
@@ -1031,12 +985,11 @@ function renderNotifications() {
   ]) { const el = $(id); el.classList.toggle('notify', ready); el.setAttribute('aria-label', ready ? label : id.slice(1)); }
   if ($('vault').classList.contains('open')) renderVault();
 }
-resize(); renderSeeds(); hud(); syncAnimals(); renderWeather(); renderNotifications(); loadRates();
-setInterval(() => { expireRates(); renderWeather(); renderNotifications(); }, 1000);
-if (!DEMO) setInterval(loadRates, 300000);
+resize(); renderSeeds(); hud(); syncAnimals(); renderWeather(); renderNotifications(); renderArcWallet();
+setInterval(() => { renderWeather(); renderNotifications(); }, 1000);
 Promise.all([load('slab', 'slab-empty.png'), ...SPRITES.map(n => load(n, `sprites/${n}.png`)),
   fetch('sprites/fit.json').then(r => r.json()).then(j => Object.assign(FIT, j)),
   fetch('sprites/crops.json').then(r => r.json()).then(j => Object.assign(CROPFIT, j))]).then(() => {
   requestAnimationFrame(frame);
-  if (DEMO) document.body.appendChild(Object.assign(document.createElement('script'), { src: 'demo.js?v=2026.11.07.6' }));
+  if (DEMO) document.body.appendChild(Object.assign(document.createElement('script'), { src: 'demo.js?v=arc.2026.11.08.1' }));
 });

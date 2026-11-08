@@ -1,0 +1,24 @@
+{
+  "network": "Arc Testnet",
+  "chainId": 5042002,
+  "address": "0xc8658f2451928d02ae42f8d113e37d6c4c673853",
+  "explorer": "https://explorer.testnet.arc.io/address/0xc8658f2451928d02ae42f8d113e37d6c4c673853",
+  "deployTxHash": "0xb8936b9aceb5959a559d974ca8f84e1b9590b143debe817cbfe7e0633bdecc18",
+  "deploymentReceiptStatus": "0x1",
+  "bytecodeBytes": 673,
+  "runtimeCodeKeccak256": "0x3111bf25f2d5c2144d7fa4257ae2c5f52c0385b88492f7303edbcf134391f4a6",
+  "localCompiler": "0.8.28+commit.7893614a.Emscripten.clang",
+  "localCompilationMatches": true,
+  "sourcePath": "contracts/StableAcresStudyBadges.sol",
+  "checks": [
+    "official RPC chain ID",
+    "deployment receipt and address log",
+    "exact local source compilation and Studio runtime bytecode match",
+    "selectors and event topic",
+    "zero initial record",
+    "invalid lessons revert",
+    "valid zero-value claim simulation",
+    "nonzero-value call reverts"
+  ],
+  "simulatedOnly": true
+}

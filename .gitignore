@@ -11,3 +11,5 @@ CODEX_PROMPT.md
 # Working paintings, reference images and art-generation utilities stay local.
 # Runtime art is bundled under public/cozy/.
 art/
+.arc-studio/
+.vercel

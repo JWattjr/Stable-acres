@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Stable Acres</title>
+<title>Stable Acres · Arc testnet</title>
 <style>
   @font-face { font-family: Fredoka; font-style: normal; font-weight: 500; font-display: swap; src: url('fonts/fredoka-500.ttf') format('truetype'); }
   @font-face { font-family: Fredoka; font-style: normal; font-weight: 600; font-display: swap; src: url('fonts/fredoka-600.ttf') format('truetype'); }
@@ -126,6 +126,12 @@
   #placebar.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
   #placebar button { border: 0; border-radius: 999px; padding: 8px 16px; background: var(--green); color: #fffdf4; font: 600 14px Fredoka; box-shadow: inset 0 -3px 0 var(--green-lip); cursor: pointer; }
   #demo { position: fixed; left: 14px; bottom: 16px; font-size: 11px; color: var(--muted); background: rgba(255, 248, 236, .85); padding: 4px 10px; border-radius: 999px; }
+  .badge-panel { margin-top: 22px; }
+  .badge-panel h4 { margin: 0 0 8px; font-size: 18px; }
+  .badge-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+  .badge-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 10px 0; }
+  .badge-row span { flex: 1; }
+  .badge-row button { max-width: 150px; }
   @media (max-width: 800px) {
     .xpwrap { min-width: 78px; } .tile { width: 62px; height: 66px; font-size: 12px; border-radius: 17px; }
     .tile img { height: 31px; } #bar-b { gap: 7px; bottom: max(12px, env(safe-area-inset-bottom)); }
@@ -145,13 +151,13 @@
 
 <div id="hud-l">
   <div class="pill"><div class="star" id="lvl">1</div>
-    <div class="xpwrap"><small>Stable Acres</small><div class="bar"><i id="xp"></i></div></div></div>
+    <div class="xpwrap"><small>Stable Acres · Arc</small><div class="bar"><i id="xp"></i></div></div></div>
   <div class="pill" id="weather" title="Rain gives crops 10% faster growth"></div>
 </div>
 <div id="hud-r">
   <div class="pill" id="coinsPill"><div class="ico coin">¢</div><span id="coins">0</span></div>
   <div class="pill" title="Gameplay USDC is simulated"><div class="ico usdc">$</div><span id="usdc">0</span><small>demo</small></div>
-  <div class="wallet-wrap"><button class="pill" id="wallet">Connect wallet</button><small id="walletBalance" role="status">Read-only · Solana mainnet</small></div>
+  <div class="wallet-wrap"><button class="pill" id="wallet">Connect wallet</button><small id="walletBalance" role="status">Arc testnet · optional badges</small></div>
 </div>
 
 <div id="bar-b">
@@ -188,7 +194,7 @@
   <div class="tot">
     <div><small>Demo staked</small><b id="vStaked">0</b></div>
     <div><small>Demo earned</small><b id="vEarned">0</b></div>
-    <div><small>Avg APY</small><b id="vApy">–</b></div>
+    <div><small>Demo avg APY</small><b id="vApy">–</b></div>
   </div>
   <div class="rows" id="vRows"></div>
 </div>
@@ -219,13 +225,14 @@
   <h3>Little lessons, lasting roots</h3>
   <p class="sub" id="studyStars">0 Study Stars</p>
   <div id="lessonContent"></div>
+  <section class="badge-panel" id="badgePanel" aria-label="Arc study badges"></section>
   <p class="sub" style="margin-top:14px">For learning, not financial advice. Real protocols can lose money; all farm balances and boosts are demo.</p>
   <a href="credits.html" target="_blank" rel="noopener">Credits</a>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
-<div id="demo">Demo mode · 1 second = 1 day of yield</div>
+<div id="demo">Arc testnet · simulated farm · 1 second = 1 day of demo yield</div>
 
-<script src="rates.js?v=2026.11.07.1"></script>
-<script src="game.js?v=2026.11.07.6"></script>
+<script src="arc.js?v=arc.2026.11.08.1"></script>
+<script src="game.js?v=arc.2026.11.08.1"></script>
 </body>
 </html>

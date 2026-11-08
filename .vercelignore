@@ -2,6 +2,8 @@ out/
 art/
 tests/
 .git/
+.git
+.arc-studio/
 .impeccable/
 CODEX_PROMPT.md
 .env*

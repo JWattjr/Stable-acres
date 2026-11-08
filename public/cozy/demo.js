@@ -58,8 +58,8 @@ const TITLE = `<div style="text-align:center">
   <div style="font:600 24px Fredoka;color:#76634a;margin-top:6px">Grow crops. Discover how yield works.</div></div>`;
 const END = `<div style="text-align:center">
   <div style="font:700 64px Fredoka;color:#5b4632">Stable Acres</div>
-  <div style="font:600 22px Fredoka;color:#76634a;margin-top:8px">A cozy farm where every crop quietly farms stablecoin yield</div>
-  <div style="font:600 16px Fredoka;color:#2f6fd0;margin-top:14px">Solana read-only prototype · simulated farm balances</div></div>`;
+  <div style="font:600 22px Fredoka;color:#76634a;margin-top:8px">Grow a little farm. Learn about stablecoins.</div>
+  <div style="font:600 16px Fredoka;color:#2f6fd0;margin-top:14px">Arc testnet edition · simulated farm balances</div></div>`;
 
 // ---------- the run ----------
 async function run() {

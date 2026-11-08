@@ -1,0 +1,113 @@
+{
+  "chainId": 5042002,
+  "address": "0xc8658f2451928d02ae42f8d113e37d6c4c673853",
+  "deployTxHash": "0xb8936b9aceb5959a559d974ca8f84e1b9590b143debe817cbfe7e0633bdecc18",
+  "explorerUrl": "https://explorer.testnet.arc.io/address/0xc8658f2451928d02ae42f8d113e37d6c4c673853",
+  "selectors": {
+    "claimBadge": "0xb5804373",
+    "claimedMask": "0x142f4cf0",
+    "hasBadge": "0x3af0c688"
+  },
+  "eventTopic": "0xb436f61c776e1e0fbbf7f30319b7c9f88187cfb6a66184a6b3ab397aad562cba",
+  "runtimeBytecode": "0x608060405234801561000f575f5ffd5b506004361061003f575f3560e01c8063142f4cf0146100435780633af0c6881461007e578063b5804373146100a1575b5f5ffd5b61006b6100513660046101cc565b6001600160a01b03165f9081526020819052604090205490565b6040519081526020015b60405180910390f35b61009161008c3660046101fc565b6100b6565b6040519015158152602001610075565b6100b46100af36600461022d565b6100e6565b005b5f5f6100c183610166565b6001600160a01b0385165f908152602081905260409020541615159150505b92915050565b5f6100f082610166565b335f908152602081905260409020549091508082161561012357604051630c8d9eab60e31b815260040160405180910390fd5b335f8181526020819052604080822084861790555160ff861692917fb436f61c776e1e0fbbf7f30319b7c9f88187cfb6a66184a6b3ab397aad562cba91a3505050565b5f60ff8216158061017a575060078260ff16115b15610198576040516316b76f4960e01b815260040160405180910390fd5b6101a3600183610246565b60ff166001901b9050919050565b80356001600160a01b03811681146101c7575f5ffd5b919050565b5f602082840312156101dc575f5ffd5b6101e5826101b1565b9392505050565b803560ff811681146101c7575f5ffd5b5f5f6040838503121561020d575f5ffd5b610216836101b1565b9150610224602084016101ec565b90509250929050565b5f6020828403121561023d575f5ffd5b6101e5826101ec565b60ff82811682821603908111156100e057634e487b7160e01b5f52601160045260245ffdfea2646970667358221220c91feaa7e98266da214d992d14bd8be5e371d28a31d891432ecb26ff40b9673964736f6c634300081c0033",
+  "runtimeCodeHash": "0x3111bf25f2d5c2144d7fa4257ae2c5f52c0385b88492f7303edbcf134391f4a6",
+  "compiler": {
+    "solcVersion": "0.8.28+commit.7893614a",
+    "configuredSolcVersion": "0.8.28",
+    "evmVersion": "cancun",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "metadataBytecodeHash": "ipfs",
+    "viaIR": false,
+    "pragma": "^0.8.20"
+  },
+  "abi": [
+    {
+      "inputs": [],
+      "name": "AlreadyClaimed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidLesson",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint8",
+          "name": "lessonId",
+          "type": "uint8"
+        }
+      ],
+      "name": "BadgeClaimed",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8",
+          "name": "lessonId",
+          "type": "uint8"
+        }
+      ],
+      "name": "claimBadge",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "claimedMask",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint8",
+          "name": "lessonId",
+          "type": "uint8"
+        }
+      ],
+      "name": "hasBadge",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+}

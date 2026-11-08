@@ -1,90 +1,64 @@
-# Stable Acres
+# Stable Acres · Arc testnet edition
 
-A cozy farm where every crop quietly farms real stablecoin yield on Solana.
+A cozy farm for learning about stablecoins, with optional onchain study badges on Arc testnet.
 
-**Playable read-only prototype:** live protocol rates and real wallet balance reads; every farm balance, stake, reward and yield boost is simulated. No deposits, transfers or signing.
+![Stable Acres](public/cozy/screenshot.jpg)
 
-[Play live](https://stable-acres.vercel.app/) · [GitHub repository](https://github.com/JWattjr/Stable-acres)
-
-![Stable Acres gameplay](public/cozy/screenshot.jpg)
+This edition lives on the `arc-edition` branch. The [Solana release](https://stable-acres.vercel.app/) remains separate on `main`.
 
 ## Play
 
-1. Open **Seeds**, pick Wheat, and tap or swipe across empty soil. Tap a growing crop to inspect its pool, rate, source and freshness; **What's this?** opens its lesson.
-2. Tap ripe crops to put them in your basket. **Orders** lets you sell immediately or deliver to villagers for extra coins, XP and a 1.25× demo yield boost on the next crop of that type.
-3. **Learn** has seven short lessons. A first correct quiz earns coins, XP and a Study Star. Lesson 3 unlocks Carrot; lesson 5 unlocks Pumpkin (also level 2). Strawberry requires level 3.
-4. **Shop** buys plots, buildings and decor. Drag the map to pan; use the wheel to zoom or the small house to recenter. Chickens give eggs; a barn adds sheep and wool. Tap the ready animal or its home, then sell produce in Orders.
-5. Rain gives 10% faster growth while it falls. Villagers, passing cars, butterflies and drifting clouds keep the village company. There are no weather penalties.
-6. The speaker button controls music, 0–100 volume and effects. Audio begins after a gesture and pauses in hidden tabs. **Vault** shows only demo farm totals.
-7. **Connect wallet** asks Phantom to connect, then reads mainnet USDC. The wallet line is separate from demo USDC and is never used as farm money. Public RPC providers receive the connected public address.
+Plant Wheat from Seeds, harvest into your basket, fulfil Orders and expand through Shop. Complete seven lessons to earn local Study Stars and unlock crops. Hens give eggs, sheep give wool, and weather, villagers, cars, butterflies and clouds bring the farm to life.
 
-## Run locally
+All crop APYs, farm USDC, stakes and rewards are demo examples. There is no live Arc yield integration, deposit, withdrawal or cash-out. Rain changes crop growth only. Lesson 5 teaches USDC gas on Arc. Saves are local to this edition.
 
-No framework, npm install or application build is needed. Use Python 3 and a modern browser:
+Farming works without a wallet. To use optional badges:
 
-```powershell
-cd stable-acres
-python -m http.server 8765 --directory public/cozy
-```
+1. Connect an injected EVM wallet; explicitly switch to Arc testnet if prompted.
+2. Complete a lesson, then open **Learn → Arc study badges**.
+3. **Record badge** requests a zero-value transaction. Your wallet shows the test-USDC network fee before confirmation. Test USDC has no cash value.
+4. The game verifies the receipt, exact transaction, event and recorded mask. Pending claims have an explorer link and refresh control. Cancellation gives no badge or farm reward.
 
-Open [the local game](http://localhost:8765/index.html?t=day). Alternatively retain the original Desktop server route used by the recorder:
+Badges are self-reported commemorative records, not verified qualifications or transferable tokens. Local quizzes gate the UI; the contract cannot prove they were taken. One claim per lesson per wallet is enforced onchain.
+
+## Run and test
+
+No frontend framework, runtime npm dependencies or application build:
 
 ```powershell
-python -m http.server 8765 --directory C:\Users\User\Desktop
+python -m http.server 8766 --bind 127.0.0.1 --directory public/cozy
+node --test tests/*.test.mjs
 ```
 
-[Original local route](http://localhost:8765/Canvas%20Exp/stable-acres/public/cozy/index.html?t=day).
-
-## Live and demo data
-
-`rates.js` contains exact verified endpoints, pool/reserve addresses, unit conversion and validation. Browser requests have a 3-second timeout, refresh every 5 minutes, and fall back to a local JSON/localStorage cache. Entries older than 24 hours use the original visibly labelled demo rates. Jito freshness uses the latest daily observation. Meteora APY annualizes the last 24 hours of fees, with compounding; it is a pool estimate, not a personal return.
-
-| Crop | Source |
-| --- | --- |
-| Wheat | [Kamino main market USDC supply](https://api.kamino.finance/kamino-market/7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF/reserves/metrics), exact reserve `D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59` |
-| Carrot | [Meteora SOL–USDC DLMM](https://dlmm.datapi.meteora.ag/pools/5rCf1DM8LjKTw4YqhnoLcngyZYeNnQqztScTogYHAS6) |
-| Pumpkin | [Jito daily staking APY](https://kobe.mainnet.jito.network/api/v1/stake_pool_stats) |
-| Strawberry | [Meteora USDC–USDT DLMM](https://dlmm.datapi.meteora.ag/pools/ARwi1S4DaiTG5DX7S4M4ZsrXqpMD1MrTmbu9ue2tpmEq) |
-
-Refresh the checked-in cache with Node 24:
+Open http://127.0.0.1:8766/index.html. Add `?t=day`, `?t=night` or `?weather=rain` for visual checks. `?demo&t=day` runs the deterministic recording without saves, wallets or network data.
 
 ```powershell
-node scripts/fetch-apys.mjs
-node --test tests/game.test.mjs
+$env:CAPTURE_URL='http://127.0.0.1:8766/index.html?demo&t=day'
+node capture-demo.mjs out/stable-acres-arc-demo.mp4
 ```
 
-The demo yield clock runs at **1 second = 1 day**, in normal play too. Earnings use a simple rate estimate, freeze the rate at planting, and cap after three grow cycles. A boost changes only the simulated cycle reward. No farm money can be withdrawn. SOL/JitoSOL exposure is not stablecoin exposure.
+Set `CHROME_PATH` and `FFMPEG_PATH` outside this workspace. Output is ignored under out/.
 
-`?demo&t=day` uses a fresh farm, seeded randomness, fixed demo rates, no saves, no protocol/RPC requests and silent audio. Add `&weather=rain` to record rain. All assets and fonts are local. Demo progress never changes your saved farm.
+## Arc contract and evidence
 
-## Record
+- [Arc testnet contract](https://explorer.testnet.arc.io/address/0xc8658f2451928d02ae42f8d113e37d6c4c673853)
+- [Deployment transaction](https://explorer.testnet.arc.io/tx/0xb8936b9aceb5959a559d974ca8f84e1b9590b143debe817cbfe7e0633bdecc18)
+- [Arc Studio workspace](https://studio.arc.io/app/64b0aeab-08e0-4ded-ba95-fe70d83bb956)
+- [Contract source](contracts/StableAcresStudyBadges.sol), [public ABI/runtime configuration](public/cozy/arc-deployment.json), [independent verification](contracts/evidence/independent-verification.json), [Studio test output](contracts/evidence/studio-test-output.txt).
+
+Official [network settings](https://docs.arc.io/arc/references/connect-to-arc): chain ID **5042002**, RPC `https://rpc.testnet.arc.io`, explorer `https://explorer.testnet.arc.io`, native USDC with **18 decimals**. Native and ERC-20 USDC are the same balance, displayed once. The client verifies wallet/RPC network identity and exact pinned contract code. It never requests token approvals or mainnet transactions.
+
+Arc Studio CLI 1.2.2 generated, tested and deployed the contract. Studio reports 46 passing Foundry tests. Independent local solc 0.8.28 compilation exactly matches deployed bytecode, including metadata. Reproduce read-only verification with developer-only tooling:
 
 ```powershell
-node capture-demo.mjs
+npm install --prefix out/contract-tools --no-save --package-lock=false solc@0.8.28
+node scripts/verify-arc-deployment.mjs
 ```
 
-The default paths retain this workspace’s installed Chrome headless shell and ffmpeg. On another computer set `CHROME_PATH`, `FFMPEG_PATH` and, if needed, `CAPTURE_URL`. Output is ignored under `out/`. The recorder uses a virtual clock and reports failure if the scripted run never finishes.
-
-## Hosting
-
-Published at the owner's request on 2026-11-08. GitHub `JWattjr/Stable-acres` is connected to Vercel project `wattxs-projects/stable-acres`; pushes to `main` deploy automatically. The project uses Node 24, the Other framework preset and the settings in `vercel.json`. This directory is its own repository; nothing from its parent belongs in it.
-
-```powershell
-node scripts/scan-staged.mjs
-git push origin main
-
-# Optional manual preview from this checkout:
-vercel link --yes --project stable-acres --scope wattxs-projects
-vercel project inspect --non-interactive --scope wattxs-projects
-vercel deploy --scope wattxs-projects
-```
-
-Verify the explicitly linked project, test the preview and its browser console, then deploy/promote production. `vercel.json` serves `public/cozy/index.html` at `/`. Its only build command refreshes static APY data; there is no application compilation or npm dependency. Browser fetches keep rates fresh after deployment; an offline cached rate eventually becomes demo. No paid cron is needed. Do not place private RPC/API credentials in browser files.
+A real signed claim remains unverified: Studio's faucet refused test-wallet funding because its account requires DEVELOPER_ADMIN_DEFAULT_ROLE. No smoke-test claim was broadcast. Browser checks used real testnet reads through an isolated read-only/rejecting test provider. See [VERIFICATION.md](VERIFICATION.md).
 
 ## Credits and scope
 
-[Full audio/font credits](public/cozy/CREDITS.md) and [audio provenance](public/cozy/audio-sources.json). Music: “Carefree” by Kevin MacLeod, CC BY 4.0, normalized and re-encoded to ~96 kbps MP3. All six foley recordings are CC0, found through Openverse. Recreate audio with `FFMPEG_PATH` set and `node scripts/prepare-audio.mjs`.
+[Credits](public/cozy/CREDITS.md), [vehicle provenance](public/cozy/VEHICLE-ART.md) and [audio sources](public/cozy/audio-sources.json) are retained. Project AI credits: Claude, Codex, ChatGPT/GPT-Image and Gemini. This adaptation used Codex and Arc Studio CLI; painted vehicles were generated earlier in Gemini.
 
-AI tools named for the project: **Claude, Codex, ChatGPT/GPT-Image, Gemini**. This revision used Codex and Gemini in the owner’s browser for the painted vehicle sprites. See [vehicle artwork provenance](public/cozy/VEHICLE-ART.md). Existing art was supplied with the project; confirm its original rights before release. No code, sprites, text or layout were copied from Happy Farm; it was studied for lesson pacing and ambient activity.
-
-See [LIMITATIONS.md](LIMITATIONS.md), [VERIFICATION.md](VERIFICATION.md) and [PROGRESS.md](PROGRESS.md) for the honest prototype boundary and task checkpoints.
+See [ARC-EDITION.md](ARC-EDITION.md), [LIMITATIONS.md](LIMITATIONS.md) and [contracts/README.md](contracts/README.md). This is a testnet learning prototype; the checks are not an independent security audit.
