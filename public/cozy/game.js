@@ -525,7 +525,7 @@ function openSheet(id) {
   for (const s of document.querySelectorAll('.sheet')) { s.classList.toggle('open', s.id === id); s.inert = s.id !== id; }
   sheetOpen = id === 'seedSheet';
   if (sheetOpen && !selSeed) { selSeed = 'wheat'; renderSeeds(); }
-  if (id === 'vault') renderVault();
+  if (id === 'vault') { renderVault(); renderOnchainVault(); arcVault?.read(); }
   if (id === 'learn') renderLearn();
   if (id === 'orders') { renderOrders(); save(); }
   if (id === 'settings') renderAudioSettings();
@@ -655,7 +655,13 @@ function burst(el) { // little gold sparks flying out of a HUD element
 const bump = el => el.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1)' }], { duration: 200 });
 
 // ---------- Arc testnet wallet + optional onchain study records ----------
-const arcWallet = DEMO ? null : StableArc.createClient({ completed: () => S.lessons, onChange: () => renderArcWallet() });
+let vaultKey = '';
+const arcWallet = DEMO ? null : StableArc.createClient({ completed: () => S.lessons, onChange: w => {
+  renderArcWallet();
+  const key = w.verified ? `${w.account}|${w.chainId}` : ''; // (re)read the vault once per verified wallet/network
+  if (key !== vaultKey) { vaultKey = key; arcVault?.read(); }
+} });
+const arcVault = DEMO ? null : StableVault.createVault({ client: arcWallet, onChange: () => renderOnchainVault() });
 function renderArcBadges() {
   const panel = $('badgePanel');
   if (DEMO) { panel.innerHTML = '<h4>Arc study badges</h4><p class="sub">Optional testnet badges are available in normal play. This recording uses no wallet or network.</p>'; return; }
@@ -701,6 +707,48 @@ $('badgePanel').onclick = async e => {
     catch (error) { toast(error.code === 4001 ? 'Wallet request cancelled' : error.message); }
   }
 };
+
+// ---------- classroom vault (Arc testnet test USDC; unlocked by lesson 2) ----------
+const VAULT_LESSON = 1; // index of "What is lending yield?"
+function renderOnchainVault() {
+  const box = $('onchainVault'); if (!box) return;
+  const typed = $('ovAmount')?.value || '', refocus = document.activeElement?.id === 'ovAmount';
+  const head = '<h4>Classroom vault · Arc testnet</h4>';
+  const rule = '<p class="sub">Test USDC only. The yield here is a fast classroom rate paid from a test reserve, so you can see how lending works in minutes. It is not a real yield.</p>';
+  if (DEMO) { box.innerHTML = head + '<p class="sub">Available in normal play. This recording uses no wallet or network.</p>'; return; }
+  if (!S.lessons.includes(VAULT_LESSON)) { box.innerHTML = head + rule + `<div class="ov-row"><button class="btn" data-ov-lesson>Finish lesson 2 to open the vault</button></div>`; return; }
+  const w = arcWallet.getState(), v = arcVault.getState(), connected = !!w.account, right = w.chainId === StableArc.network.id;
+  if (!connected || !right || !v.verified) {
+    const why = !connected ? 'Connect a wallet to try it.' : !right ? 'Switch your wallet to Arc testnet.' : v.problem || 'Reading the vault on Arc testnet…';
+    box.innerHTML = head + rule + `<p class="sub" role="status">${escapeHTML(w.problem || why)}</p><div class="ov-row"><button class="btn" data-ov-connect ${w.busy ? 'disabled' : ''}>${!connected ? 'Connect wallet' : !right ? 'Switch to Arc testnet' : 'Retry'}</button><a href="https://faucet.circle.com/" target="_blank" rel="noopener">Get test USDC</a></div>`;
+    return;
+  }
+  const cap = BigInt(v.config.perWalletCap), room = cap > v.principal ? cap - v.principal : 0n, f = StableVault.formatWei;
+  const emptyReserve = v.reserve === 0n;
+  const learned = v.kind === 'withdraw' && v.note ? '<div class="learned"><b>What just happened?</b> You lent test USDC to the vault, it paid you a fee for the time your money sat there, and you took everything back. That fee is yield. Real lending pays it from borrowers; here a test reserve pays it so you can watch it happen.</div>' : '';
+  box.innerHTML = head + rule + `
+    <div class="ov-nums"><div><small>You deposited</small><b>${f(v.principal)}</b></div><div><small>Yield earned</small><b id="ovYield">${f(arcVault.pendingNow(), 6)}</b></div><div><small>Room left (cap ${f(cap, 0)})</small><b>${f(room)}</b></div></div>
+    <p class="sub">Classroom rate: about 1% of your deposit per hour. Withdraw any time to take it all back.</p>
+    ${emptyReserve ? '<div class="warn">The yield reserve is empty right now. Deposits and withdrawals work, but no yield is paid until the reserve is refilled.</div>' : `<p class="sub">Yield reserve: ${f(v.reserve, 2)} test USDC</p>`}
+    <div class="ov-row"><input id="ovAmount" inputmode="decimal" placeholder="Amount, e.g. 5" aria-label="Test USDC to deposit" value="${escapeHTML(typed)}" ${v.busy ? 'disabled' : ''}><button class="btn" data-ov-deposit ${v.busy || room === 0n ? 'disabled' : ''}>${v.busy && v.kind === 'deposit' ? (v.txHash ? 'Confirming…' : 'Confirm in wallet…') : 'Deposit'}</button><button class="btn" data-ov-withdraw ${v.busy || (v.principal === 0n && v.claimable === 0n) ? 'disabled' : ''}>${v.busy && v.kind === 'withdraw' ? (v.txHash ? 'Confirming…' : 'Confirm in wallet…') : 'Withdraw all'}</button></div>
+    <p class="sub" role="status">${escapeHTML(v.problem || v.note || 'Each action is a test transaction; your wallet shows the small test-USDC network fee first.')}</p>
+    ${learned}
+    <p class="sub"><a href="${StableArc.network.explorer}/address/${v.config.address}" target="_blank" rel="noopener">View vault contract</a>${v.txHash ? ` · <a href="${StableArc.network.explorer}/tx/${v.txHash}" target="_blank" rel="noopener">View transaction</a>` : ''}</p>`;
+  if (refocus) { const el = $('ovAmount'); el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+}
+$('onchainVault').onclick = async e => {
+  const b = e.target.closest('button'); if (!b || DEMO) return;
+  try {
+    if (b.hasAttribute('data-ov-lesson')) return openLesson(VAULT_LESSON);
+    if (b.hasAttribute('data-ov-connect')) return connectArcWallet();
+    if (b.hasAttribute('data-ov-deposit')) { await arcVault.deposit(StableVault.parseUSDC($('ovAmount').value)); $('ovAmount').value = ''; sfx?.('coin'); }
+    if (b.hasAttribute('data-ov-withdraw')) { await arcVault.withdrawAll(); sfx?.('coin'); }
+  } catch (error) { toast(error.code === 4001 ? 'Wallet request cancelled' : error.message); }
+};
+setInterval(() => { // tick the yield number between reads using the contract's own formula
+  const el = $('ovYield'); if (el && !DEMO && $('vault').classList.contains('open')) el.textContent = StableVault.formatWei(arcVault.pendingNow(), 6);
+}, 1000);
+setInterval(() => { if (!DEMO && $('vault').classList.contains('open') && arcVault.getState().verified && !arcVault.getState().busy) arcVault.read(); }, 15000);
 
 // ---------- local, licensed Web Audio (including iOS volume control) ----------
 const audioPrefs = { music: true, effects: true, volume: 45 };

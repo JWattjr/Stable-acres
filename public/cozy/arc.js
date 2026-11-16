@@ -158,7 +158,7 @@
         inFlight = false; if (current(version, account)) { state.busy = false; state.pending = pendingClaims.get(account)?.id || null; emit(); }
       }
     }
-    return Object.freeze({ connect, refresh, switchNetwork, disconnect, claim, getState: () => ({ ...state }) });
+    return Object.freeze({ connect, refresh, switchNetwork, disconnect, claim, provider: () => provider, getState: () => ({ ...state }) });
   }
   globalThis.StableArc = Object.freeze({ network, createClient, formatUSDC, lessonBit });
 })();

@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 
 const game = readFileSync(new URL('../public/cozy/game.js', import.meta.url), 'utf8').split('// ---------- boot ----------')[0];
 const arc = readFileSync(new URL('../public/cozy/arc.js', import.meta.url), 'utf8');
+const vaultJs = readFileSync(new URL('../public/cozy/vault.js', import.meta.url), 'utf8');
 function farm(search = '?weather=clear', storage = new Map(), fetcher) {
   let now = Date.parse('2026-11-07T12:00:00Z'), requests = [];
   class Clock extends Date { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } }
@@ -25,7 +26,7 @@ function farm(search = '?weather=clear', storage = new Map(), fetcher) {
     Image: class {}, addEventListener() {}, setTimeout: () => 0, clearTimeout() {}, setInterval() {}, requestAnimationFrame() {},
     fetch: async (url, options) => { requests.push({ url, options }); if (fetcher) return fetcher(url, options); throw Error('offline'); },
   });
-  vm.runInContext(arc, c); vm.runInContext(game, c);
+  vm.runInContext(arc, c); vm.runInContext(vaultJs, c); vm.runInContext(game, c);
   const run = code => vm.runInContext(code, c);
   return { run, advance: ms => now += ms, setTime: value => now = value, storage, elements, requests };
 }

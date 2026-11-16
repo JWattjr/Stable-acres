@@ -25,6 +25,15 @@ Farming works without a wallet. To use optional badges:
 
 Badges are self-reported commemorative records, not verified qualifications or transferable tokens. Local quizzes gate the UI; the contract cannot prove they were taken. One claim per lesson per wallet is enforced onchain.
 
+## Classroom test vault (Arc testnet)
+
+After lesson 2 (lending yield), the **Vault** panel opens a hands-on lesson: deposit test USDC, watch yield accrue, withdraw. It uses a second Arc Studio contract, `StableAcresTestVault` ([address](https://explorer.testnet.arc.io/address/0x3e8016ac2f2f21be6b268159433e1dc962e81209), [source](contracts/StableAcresTestVault.sol), [Studio manifest and 53 passing tests](contracts/evidence/)).
+
+- Native test USDC, no approvals. Cap 50 per wallet. No owner, admin, upgrade or pause: nobody can touch a depositor's principal, and principal is withdrawable even when the reserve is empty.
+- The yield is a **classroom rate** (about 1% of the deposit per hour) paid from a reserve anyone can top up with `fundReserve()`. It is a teaching rate, not a real yield or APY, and the game says so.
+- The client (`vault.js`) pins the deployed bytecode and verifies every write against the receipt, the exact transaction, the event and fresh contract state.
+- `node scripts/build-vault-config.mjs` rebuilds `vault-deployment.json` from the manifest and live Arc code.
+
 ## Run and test
 
 No frontend framework, runtime npm dependencies or application build:

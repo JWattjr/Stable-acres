@@ -1,0 +1,124 @@
+Compiling 1 files with Solc 0.8.28
+Solc 0.8.28 finished in 1.55s
+Compiler run successful with warnings:
+Warning (5159): "selfdestruct" has been deprecated. Note that, starting from the Cancun hard fork, the underlying opcode no longer deletes the code and data associated with an account and only transfers its Ether to the beneficiary, unless executed in the same transaction in which the contract was created (see EIP-6780). Any use in newly deployed contracts is strongly discouraged even if the new behavior is taken into account. Future changes to the EVM might further reduce the functionality of the opcode.
+  --> contracts/test/StableAcresTestVault.Helpers.sol:10:9:
+   |
+10 |         selfdestruct(target);
+   |         ^^^^^^^^^^^^
+
+
+Ran 53 tests for contracts/test/StableAcresTestVault.t.sol:StableAcresTestVaultTest
+[PASS] invariant_BalanceCoversPrincipalPlusReserve() (runs: 256, calls: 12800, reverts: 0)
+
+╭--------------+-------------+-------+---------+----------╮
+| Contract     | Selector    | Calls | Reverts | Discards |
++=========================================================+
+| VaultHandler | deposit     | 1780  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | forceEth    | 1878  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | fundReserve | 1805  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | step        | 1819  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | warp        | 1841  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | withdraw    | 1830  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | withdrawAll | 1847  | 0       | 0        |
+╰--------------+-------------+-------+---------+----------╯
+
+[PASS] invariant_NoWalletOverpaidAndReserveConserved() (runs: 256, calls: 12800, reverts: 0)
+
+╭--------------+-------------+-------+---------+----------╮
+| Contract     | Selector    | Calls | Reverts | Discards |
++=========================================================+
+| VaultHandler | deposit     | 1780  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | forceEth    | 1878  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | fundReserve | 1805  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | step        | 1819  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | warp        | 1841  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | withdraw    | 1830  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | withdrawAll | 1847  | 0       | 0        |
+╰--------------+-------------+-------+---------+----------╯
+
+[PASS] invariant_TotalPrincipalEqualsSumOfPrincipals() (runs: 256, calls: 12800, reverts: 0)
+
+╭--------------+-------------+-------+---------+----------╮
+| Contract     | Selector    | Calls | Reverts | Discards |
++=========================================================+
+| VaultHandler | deposit     | 1780  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | forceEth    | 1878  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | fundReserve | 1805  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | step        | 1819  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | warp        | 1841  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | withdraw    | 1830  | 0       | 0        |
+|--------------+-------------+-------+---------+----------|
+| VaultHandler | withdrawAll | 1847  | 0       | 0        |
+╰--------------+-------------+-------+---------+----------╯
+
+[PASS] testFuzz_PartialWithdraw_ExactAccountingAcrossSettle(uint256,uint256,uint256,uint256) (runs: 512, μ: 162494, ~: 166311)
+[PASS] testFuzz_PrincipalAlwaysWithdrawableAtZeroReserve(uint256,uint256) (runs: 512, μ: 102378, ~: 103646)
+[PASS] testFuzz_RandomSequences_KeepAccountingSoundAndNeverOverpay(uint256) (runs: 512, μ: 5046791, ~: 5049366)
+[PASS] testFuzz_SingleDeposit_ExactPayout(uint256,uint256,uint256) (runs: 512, μ: 138122, ~: 139597)
+[PASS] testFuzz_TwoDepositSegments_ExactYield(uint256,uint256,uint256,uint256) (runs: 512, μ: 147011, ~: 146983)
+[PASS] test_Constructor_AcceptsBoundaryValues() (gas: 996280)
+[PASS] test_Constructor_RevertsOnRateAboveScale() (gas: 58472)
+[PASS] test_Constructor_RevertsOnZeroCap() (gas: 58400)
+[PASS] test_Constructor_RevertsOnZeroRate() (gas: 58403)
+[PASS] test_Constructor_StoresImmutablesAndStartsEmpty() (gas: 13431)
+[PASS] test_DepositThenWithdrawAll_OneHour_ExactYieldAndEvents() (gas: 144520)
+[PASS] test_DepositThenWithdrawAll_VariousDurationsAndAmounts() (gas: 712520)
+[PASS] test_Deposit_CapChecksAfterPartialWithdraw() (gas: 131652)
+[PASS] test_Deposit_CapIsCumulative() (gas: 127810)
+[PASS] test_Deposit_CapIsPerWallet() (gas: 151942)
+[PASS] test_Deposit_CapPlusOneWei_Reverts() (gas: 28213)
+[PASS] test_Deposit_ExactlyAtCap_Succeeds() (gas: 92224)
+[PASS] test_Deposit_ZeroReverts() (gas: 16059)
+[PASS] test_ForcedEth_DoesNotFundYield() (gas: 104786)
+[PASS] test_ForcedEth_SelfdestructAndDeal_CannotBeWithdrawnOrBreakAccounting() (gas: 273865)
+[PASS] test_FundReserve_AccumulatesAndEmits() (gas: 58787)
+[PASS] test_FundReserve_ZeroReverts() (gas: 16105)
+[PASS] test_MultipleDepositsMidAccrual_ExactYieldAcrossSegments() (gas: 165638)
+[PASS] test_OnePercentPerHour_Approx() (gas: 130117)
+[PASS] test_PartialWithdraw_PaysAmountPlusClaimable_AndKeepsAccruing() (gas: 171469)
+[PASS] test_PlainNativeTransfer_EmptyCalldata_Reverts() (gas: 21023)
+[PASS] test_Reentrancy_Deposit_RevertsTransferFailed() (gas: 782207)
+[PASS] test_Reentrancy_Deposit_SwallowedAccountingConsistent() (gas: 726375)
+[PASS] test_Reentrancy_FundReserve_RevertsTransferFailed() (gas: 782244)
+[PASS] test_Reentrancy_FundReserve_SwallowedAccountingConsistent() (gas: 726431)
+[PASS] test_Reentrancy_GuardResetsAfterCall() (gas: 804717)
+[PASS] test_Reentrancy_PartialWithdrawOuter_SwallowedCannotDoubleWithdraw() (gas: 761099)
+[PASS] test_Reentrancy_WithdrawAll_RevertsTransferFailed() (gas: 775271)
+[PASS] test_Reentrancy_WithdrawAll_SwallowedAccountingConsistent() (gas: 719438)
+[PASS] test_Reentrancy_Withdraw_RevertsTransferFailed() (gas: 775238)
+[PASS] test_Reentrancy_Withdraw_SwallowedAccountingConsistent() (gas: 719427)
+[PASS] test_RejectingReceiver_TransferFailed_StateUnchanged() (gas: 389157)
+[PASS] test_Reserve_ClaimableCappedByReserveButPendingIsNot() (gas: 142652)
+[PASS] test_Reserve_PartialWithdrawWithEmptyReservePaysOnlyAmount() (gas: 131281)
+[PASS] test_Reserve_PartialYieldWhenReserveSmallerThanOwed_ThenCollectAfterFunding() (gas: 185908)
+[PASS] test_Reserve_PrincipalFullyWithdrawableWithEmptyReserve() (gas: 111703)
+[PASS] test_SharedReserve_FirstComeFirstServed_PrincipalNeverTaken() (gas: 259218)
+[PASS] test_ThirdPartyFunding_DoesNotChangeAnyonesPrincipal() (gas: 231416)
+[PASS] test_TwoWallets_AreIndependent() (gas: 223341)
+[PASS] test_UnknownSelector_Reverts() (gas: 21928)
+[PASS] test_WithdrawAll_NothingOwedReverts() (gas: 49250)
+[PASS] test_WithdrawAll_PendingButEmptyReserveReverts_StateKept() (gas: 112676)
+[PASS] test_Withdraw_ExactPrincipalSucceeds() (gas: 86948)
+[PASS] test_Withdraw_MoreThanPrincipalReverts() (gas: 104856)
+[PASS] test_Withdraw_ZeroReverts() (gas: 95733)
+Suite result: ok. 53 passed; 0 failed; 0 skipped; finished in 5.51s (16.31s CPU time)
+
+Ran 1 test suite in 5.51s (5.51s CPU time): 53 tests passed, 0 failed, 0 skipped (53 total tests)

@@ -47,7 +47,7 @@
   .seed img { height: 56px; }
   .seed b { display: block; font-size: 14px; }
   .seed .meta { font-size: 11px; color: var(--muted); }
-  .seed .tag { margin-top: 4px; font-size: 10px; background: #eef5ff; color: #2c5d9c; border-radius: 8px; padding: 2px 4px; }
+  .seed .tag { margin-top: 4px; font-size: 12px; background: #eef5ff; color: #2c5d9c; border-radius: 8px; padding: 2px 4px; }
   #bubble { position: fixed; transform: translate(-50%, -100%); background: var(--cream); border: 2px solid var(--edge); border-radius: 16px; padding: 10px 12px; width: 232px; box-shadow: 0 8px 20px rgba(80, 60, 30, .22); display: none; font-size: 13px; pointer-events: auto; }
   #bubble:after { content: ""; position: absolute; left: 50%; bottom: -9px; margin-left: -8px; width: 16px; height: 9px; background: var(--edge); clip-path: polygon(0 0, 100% 0, 50% 100%); }
   #bubble .hd { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; }
@@ -126,6 +126,17 @@
   #placebar.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
   #placebar button { border: 0; border-radius: 999px; padding: 8px 16px; background: var(--green); color: #fffdf4; font: 600 14px Fredoka; box-shadow: inset 0 -3px 0 var(--green-lip); cursor: pointer; }
   #demo { position: fixed; left: 14px; bottom: 16px; font-size: 11px; color: var(--muted); background: rgba(255, 248, 236, .85); padding: 4px 10px; border-radius: 999px; }
+  .ov { background: #fff; border: 2px solid var(--edge); border-radius: 16px; padding: 12px 14px; margin: 8px 0 12px; }
+  .ov h4 { margin: 0 0 4px; font-size: 17px; }
+  .ov .ov-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+  .ov .ov-nums div { background: var(--cream); border-radius: 12px; padding: 7px 9px; }
+  .ov .ov-nums small { display: block; color: var(--muted); font-size: 12px; }
+  .ov .ov-nums b { font-size: 16px; font-variant-numeric: tabular-nums; }
+  .ov .ov-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+  .ov input { flex: 1 1 110px; min-width: 0; border: 2px solid var(--edge); border-radius: 10px; padding: 8px 10px; font: 500 14px Fredoka, sans-serif; color: var(--ink); background: #fffdf7; }
+  .ov .btn { width: auto; margin: 0; padding: 9px 16px; }
+  .ov .warn { background: #fff3d6; border-radius: 10px; padding: 7px 10px; font-size: 13px; margin-top: 8px; }
+  .ov .learned { background: #eef5e6; border-radius: 10px; padding: 8px 10px; font-size: 13px; margin-top: 8px; }
   .badge-panel { margin-top: 22px; }
   .badge-panel h4 { margin: 0 0 8px; font-size: 18px; }
   .badge-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
@@ -139,7 +150,7 @@
     #hud-r { top: 72px; left: 10px; right: 10px; gap: 6px; align-items: start; }
     #hud-r .pill { gap: 5px; padding-right: 9px; font-size: 12px; }
     #wallet { min-height: 40px; } .wallet-wrap { margin-left: auto; }
-    #walletBalance { max-width: 145px; font-size: 10px; text-align: right; }
+    #walletBalance { max-width: 160px; font-size: 12px; text-align: right; }
     .ico { width: 24px; height: 24px; } #toast { top: 142px; max-width: calc(100% - 24px); width: max-content; font-size: 12px; border-radius: 16px; }
     .sheet { max-height: calc(100dvh - 150px); bottom: 10px; } #demo { display: none; }
     .inventory-row { gap: 8px; } .lesson-card h4 { font-size: 19px; }
@@ -189,7 +200,8 @@
 <div class="sheet" id="vault" inert aria-label="Vault">
   <button class="x" data-close aria-label="Close Vault">✕</button>
   <h3>Vault</h3>
-  <p class="sub">Simulated balances · no deposits · 1 second = 1 day of demo yield.</p>
+  <section class="ov" id="onchainVault" aria-label="Classroom vault on Arc testnet"></section>
+  <p class="sub">The farm below uses simulated balances · 1 second = 1 day of demo yield.</p>
   <p class="sub" id="rateStatus">Demo rates</p>
   <div class="tot">
     <div><small>Demo staked</small><b id="vStaked">0</b></div>
@@ -232,7 +244,8 @@
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="demo">Arc testnet · simulated farm · 1 second = 1 day of demo yield</div>
 
-<script src="arc.js?v=arc.2026.11.08.1"></script>
-<script src="game.js?v=arc.2026.11.08.1"></script>
+<script src="arc.js?v=arc.2026.11.16.1"></script>
+<script src="vault.js?v=arc.2026.11.16.1"></script>
+<script src="game.js?v=arc.2026.11.16.1"></script>
 </body>
 </html>

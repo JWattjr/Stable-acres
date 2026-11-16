@@ -1,0 +1,493 @@
+{
+  "schemaVersion": 1,
+  "contract": "StableAcresTestVault",
+  "purpose": "Classroom test-USDC vault for the Stable Acres Arc testnet edition. Yield is a fixed teaching 'classroom rate' paid only from a pre-funded reserve. It is NOT a real, market or sustainable yield source and NOT an APY. Test USDC has no cash value.",
+  "chainId": 5042002,
+  "chainName": "Arc Testnet",
+  "network": "ARC-TESTNET",
+  "contractAddress": "0x3e8016ac2f2f21be6b268159433e1dc962e81209",
+  "deployTxHash": "0x4859290dbda73c7a135598dc3551dcae436e08d560adffdfff3800b6b42a3fea",
+  "deployBlockNumber": 72605197,
+  "deployReceiptStatus": "success",
+  "deployedBy": "Arc Studio platform testnet deployer (testnet only, via Circle Smart Contract Platform)",
+  "addressAppearsInDeployReceiptLogs": true,
+  "constructorArgs": {
+    "ratePerSecond": "2777777777777",
+    "perWalletCap": "50000000000000000000",
+    "scale": "1000000000000000000"
+  },
+  "classroomRate": {
+    "label": "classroom rate (teaching only)",
+    "perHourOfPrincipal": "about 1% (floor-rounded, slightly below)",
+    "simpleYearlyEquivalent": "roughly 8,760% per year, simple (not compounded). Not an APY. Not a real or sustainable yield.",
+    "perWalletCapUsdc": "50",
+    "nativeDecimals": 18
+  },
+  "explorer": {
+    "addressUrl": "https://explorer.testnet.arc.io/address/0x3e8016ac2f2f21be6b268159433e1dc962e81209",
+    "txUrl": "https://explorer.testnet.arc.io/tx/0x4859290dbda73c7a135598dc3551dcae436e08d560adffdfff3800b6b42a3fea"
+  },
+  "rpcUrl": "https://rpc.testnet.arc.io",
+  "abi": [
+    {
+      "type": "constructor",
+      "inputs": [
+        {
+          "name": "ratePerSecond_",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "perWalletCap_",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "SCALE",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "claimableYieldOf",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "deposit",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
+      "name": "fundReserve",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
+      "name": "pendingYieldOf",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "perWalletCap",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "principalOf",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "ratePerSecond",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "reserveBalance",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "totalPrincipal",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "withdrawAll",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "event",
+      "name": "Deposited",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "ReserveFunded",
+      "inputs": [
+        {
+          "name": "from",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Withdrawn",
+      "inputs": [
+        {
+          "name": "account",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "principal",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "yield",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "error",
+      "name": "CapExceeded",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InsufficientPrincipal",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "InvalidConfig",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "NothingToWithdraw",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "Reentrancy",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "TransferFailed",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "ZeroAmount",
+      "inputs": []
+    }
+  ],
+  "functionSelectors": [
+    {
+      "name": "SCALE",
+      "signature": "SCALE()",
+      "selector": "0xeced5526",
+      "stateMutability": "view"
+    },
+    {
+      "name": "claimableYieldOf",
+      "signature": "claimableYieldOf(address)",
+      "selector": "0x8aae98b6",
+      "stateMutability": "view"
+    },
+    {
+      "name": "deposit",
+      "signature": "deposit()",
+      "selector": "0xd0e30db0",
+      "stateMutability": "payable"
+    },
+    {
+      "name": "fundReserve",
+      "signature": "fundReserve()",
+      "selector": "0x6f9c3c8f",
+      "stateMutability": "payable"
+    },
+    {
+      "name": "pendingYieldOf",
+      "signature": "pendingYieldOf(address)",
+      "selector": "0x465495a7",
+      "stateMutability": "view"
+    },
+    {
+      "name": "perWalletCap",
+      "signature": "perWalletCap()",
+      "selector": "0x472ecbb5",
+      "stateMutability": "view"
+    },
+    {
+      "name": "principalOf",
+      "signature": "principalOf(address)",
+      "selector": "0x61e20a1c",
+      "stateMutability": "view"
+    },
+    {
+      "name": "ratePerSecond",
+      "signature": "ratePerSecond()",
+      "selector": "0x8eff1a98",
+      "stateMutability": "view"
+    },
+    {
+      "name": "reserveBalance",
+      "signature": "reserveBalance()",
+      "selector": "0xa10954fe",
+      "stateMutability": "view"
+    },
+    {
+      "name": "totalPrincipal",
+      "signature": "totalPrincipal()",
+      "selector": "0x4b1533b2",
+      "stateMutability": "view"
+    },
+    {
+      "name": "withdraw",
+      "signature": "withdraw(uint256)",
+      "selector": "0x2e1a7d4d",
+      "stateMutability": "nonpayable"
+    },
+    {
+      "name": "withdrawAll",
+      "signature": "withdrawAll()",
+      "selector": "0x853828b6",
+      "stateMutability": "nonpayable"
+    }
+  ],
+  "eventTopics": [
+    {
+      "name": "Deposited",
+      "signature": "Deposited(address,uint256)",
+      "topic0": "0x2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c4",
+      "indexed": [
+        "account"
+      ]
+    },
+    {
+      "name": "ReserveFunded",
+      "signature": "ReserveFunded(address,uint256)",
+      "topic0": "0xb52b99b9e83551fcbd069b559cc3e823e2a1a3bad8ece46561ea77524394c850",
+      "indexed": [
+        "from"
+      ]
+    },
+    {
+      "name": "Withdrawn",
+      "signature": "Withdrawn(address,uint256,uint256)",
+      "topic0": "0x92ccf450a286a957af52509bc1c9939d1a6a481783e142e41e2499f0bb66ebc6",
+      "indexed": [
+        "account"
+      ]
+    }
+  ],
+  "errorSelectors": [
+    {
+      "name": "CapExceeded",
+      "signature": "CapExceeded()",
+      "selector": "0xa4875a49"
+    },
+    {
+      "name": "InsufficientPrincipal",
+      "signature": "InsufficientPrincipal()",
+      "selector": "0xd24a69a5"
+    },
+    {
+      "name": "InvalidConfig",
+      "signature": "InvalidConfig()",
+      "selector": "0x35be3ac8"
+    },
+    {
+      "name": "NothingToWithdraw",
+      "signature": "NothingToWithdraw()",
+      "selector": "0xd0d04f60"
+    },
+    {
+      "name": "Reentrancy",
+      "signature": "Reentrancy()",
+      "selector": "0xab143c06"
+    },
+    {
+      "name": "TransferFailed",
+      "signature": "TransferFailed()",
+      "selector": "0x90b8ec18"
+    },
+    {
+      "name": "ZeroAmount",
+      "signature": "ZeroAmount()",
+      "selector": "0x1f2a2005"
+    }
+  ],
+  "runtimeCode": {
+    "hashAlgorithm": "keccak256 over the eth_getCode runtime bytecode (immutables included)",
+    "hash": "0x7193b8849c1fabb8aa43814cbec8639bc5790d8588a8b476ecab37cff51921c0",
+    "byteLength": 2206,
+    "matchesLocalArtifact": true,
+    "comparisonNote": "Artifact runtime with the two immutable slots (ratePerSecond, perWalletCap) filled with the intended values matched eth_getCode exactly.",
+    "verifiedAgainstChainId": 5042002
+  },
+  "liveStateAtManifestTime": {
+    "totalPrincipal": "0",
+    "reserveBalance": "0",
+    "contractNativeBalance": "0"
+  },
+  "compiler": {
+    "solcVersion": "0.8.28+commit.7893614a",
+    "configuredSolcVersion": "0.8.28",
+    "evmVersion": "cancun",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "metadataBytecodeHash": "ipfs",
+    "viaIR": false,
+    "pragma": "^0.8.20"
+  },
+  "tests": {
+    "framework": "forge test -vv",
+    "totalTests": 53,
+    "passed": 53,
+    "failed": 0,
+    "skipped": 0,
+    "breakdown": "45 unit tests, 5 fuzz tests (512 runs each), 3 invariant tests (256 runs x 50 calls)",
+    "suite": "contracts/test/StableAcresTestVault.t.sol (helpers in StableAcresTestVault.Helpers.sol)",
+    "fullOutput": "contracts/test-output-vault.txt"
+  },
+  "review": {
+    "preset": "balanced",
+    "independentReviews": 2,
+    "findings": "none material",
+    "staticAnalysis": "Slither: one false-positive 'incorrect-equality' on a zero-payout check, plus timestamp, compiler-version and low-level-call informational notes. Accepted."
+  },
+  "reserveFunding": {
+    "status": "not funded",
+    "reserveBalance": "0",
+    "blocker": "Studio faucet refused: DEVELOPER_ADMIN_DEFAULT_ROLE is required on the account. No permissions were changed and nothing was bypassed.",
+    "sandboxTestWalletAddress": "0x3764D3dDD802121E6c9Bc0Bb6a1437F855201cCd",
+    "note": "Fund this address with about 100 test USDC from Arc public faucet (native USDC is gas and balance), then the sandbox wallet can call fundReserve(). Anyone can also call fundReserve() directly from their own testnet wallet."
+  },
+  "notes": [
+    "Testnet only. Test USDC has no cash value.",
+    "Not a substitute for an independent audit; confirm the bytecode independently before relying on it.",
+    "No owner, admin, pause, upgrade, selfdestruct or delegatecall. No function can take the reserve or another wallet's principal."
+  ]
+}
